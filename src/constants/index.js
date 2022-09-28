@@ -1,3 +1,3 @@
-import { questions } from "./data.js";
+import { questions, ItemTypes } from "./data.js";
 
-export { questions };
+export { questions, ItemTypes };

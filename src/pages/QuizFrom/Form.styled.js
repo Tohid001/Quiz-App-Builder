@@ -36,4 +36,14 @@ export const StyledQuestionSection = styled.section`
       }
     }
   }
+  &:nth-of-type(2) {
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+    & div {
+      margin-bottom: 1em;
+    }
+    background-color: transparent;
+    padding: 0;
+  }
 `;

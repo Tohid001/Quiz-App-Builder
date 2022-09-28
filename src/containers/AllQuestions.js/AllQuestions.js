@@ -1,6 +1,6 @@
 import React from "react";
 
-function AllQuestions() {
+function AllQuestions({}) {
   return <div>AllQuestions</div>;
 }
 

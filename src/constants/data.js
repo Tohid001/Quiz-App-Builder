@@ -1,9 +1,11 @@
-export const data = [];
+export const ItemTypes = {
+  QUESTION: "question",
+};
 
 export const questions = [
   {
     id: 1,
-    questiontext: "what is the answer?",
+    questiontext: "hello?",
     questionType: "radio",
     options: [
       { optionText: "option 1" },
@@ -16,7 +18,7 @@ export const questions = [
   },
   {
     id: 2,
-    questiontext: "what is the answer?",
+    questiontext: "wow?",
     questionType: "radio",
     options: [
       { optionText: "option 1" },
@@ -29,7 +31,7 @@ export const questions = [
   },
   {
     id: 3,
-    questiontext: "what is the answer?",
+    questiontext: "hi?",
     questionType: "checkbox",
     options: [
       { optionText: "option 1" },
