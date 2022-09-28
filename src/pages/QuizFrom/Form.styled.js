@@ -37,12 +37,11 @@ export const StyledQuestionSection = styled.section`
     }
   }
   &:nth-of-type(2) {
+    margin-top: calc(1em + 20px);
     display: flex;
     flex-direction: column;
-    gap: 2em;
-    & div {
-      margin-bottom: 1em;
-    }
+    gap: 3em;
+
     background-color: transparent;
     padding: 0;
   }

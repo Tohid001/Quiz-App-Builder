@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+
 //import utility
 import update from "immutability-helper";
 import { useParams } from "react-router-dom";
@@ -15,14 +16,70 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
 //importing data
-import { questions } from "../../constants";
+import { questions, initialFormState } from "../../constants";
 
-const { Panel } = Collapse;
-
+//********COMPONENT DEFINITION*******
 function QuizeForm() {
+  const [quizeFormStates, setQuizeFormStates] = useState({});
+
   const { formId } = useParams();
   const [questionsList, setQuestionList] = useState([...questions]);
   // console.log({ formId, questionsList });
+
+  //**this effect will be called first */
+  useEffect(() => {
+    const localQuizeFormStates = JSON.parse(
+      localStorage.getItem("quizeFormStates")
+    );
+    if (localQuizeFormStates) {
+      localStorage.setItem("quizeFormStates", JSON.stringify(quizeFormStates));
+    }
+    return () => {};
+  }, [quizeFormStates]);
+
+  //**this effect will be called last */
+  useEffect(() => {
+    try {
+      const localQuizList = JSON.parse(localStorage.getItem("quizes"));
+      if (localQuizList) {
+        //after retrieving the formstate for corresponding formId from the localStorage key of "quizes" now update the localState and  localStorage key of "quizeFormStates"  with the retrieved state
+        console.log("1.opened an existing quiz");
+        const quizLocalIndex = localQuizList?.findIndex((quiz, index) => {
+          return quiz.id === formId;
+        });
+        if (quizLocalIndex !== -1) {
+          console.log("2.opened an existing quiz");
+          setQuizeFormStates(localQuizList[quizLocalIndex]);
+          localStorage.setItem(
+            "quizeFormStates",
+            JSON.stringify(localQuizList[quizLocalIndex])
+          );
+        }
+      } else {
+        //retrieve the formstate from the localStorage key of "quizeFormStates"
+        const localQuizeFormStates = JSON.parse(
+          localStorage.getItem("quizeFormStates")
+        );
+        if (localQuizeFormStates) {
+          //****updating the local state with retrieved value and will be used when we will reload the page***
+          console.log("page reloading");
+          setQuizeFormStates(localQuizeFormStates);
+        } else {
+          //****  set a new localStorage key of "quizeFormStates" and will be used when we will create a new quiz***
+          console.log("creating a form");
+          localStorage.setItem(
+            "quizeFormStates",
+            JSON.stringify(initialFormState)
+          );
+        }
+      }
+      return () => {
+        localStorage.removeItem("quizeFormStates");
+      };
+    } catch (error) {
+      console.log({ error });
+    }
+  }, []);
 
   const sortQuestionHandler = useCallback((dragIndex, hoverIndex) => {
     // console.log("sortQuestionHandler called");
@@ -35,6 +92,10 @@ function QuizeForm() {
       })
     );
   }, []);
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+  };
 
   return (
     <StyledForm>
@@ -64,20 +125,5 @@ function QuizeForm() {
     </StyledForm>
   );
 }
-
-// const Demo = (props) => {
-//   return (
-//     <Panel
-//       // {...CollapsePanelProps}
-//       // header={"header"}
-//       // key={index}
-//       // forceRender
-//       // // extra={genExtra()}
-//       {...props}
-//     >
-//       hello
-//     </Panel>
-//   );
-// };
 
 export default QuizeForm;
