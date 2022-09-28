@@ -3,7 +3,7 @@ import React, { useState, useEffect, Children } from "react";
 import { useParams } from "react-router-dom";
 
 //importing my components
-import { QuestionBody } from "../../Components";
+import { Question } from "../../Components";
 
 ///importing ui's
 import { Button, Collapse, Input, Space, CollapsePanelProps } from "antd";
@@ -27,36 +27,27 @@ function QuizeForm() {
       </StyledQuestionSection>
 
       <Collapse bordered={false} accordion onChange={(key) => {}}>
-        {/* {questions?.map((question, index) => (
-          <Panel
-            header={<p>{`${index + 1}. ${question.questiontext}`}</p>}
-            key={index}
-            // extra={genExtra()}
-          >
-            <QuestionBody key={question.id} question={question} />
-          </Panel>
-        ))} */}
-        {questions.map((question, index) => (
-          <Demo header="header" key={index} />
+        {questions?.map((question, index) => (
+          <Question key={question.id} question={question} />
         ))}
       </Collapse>
     </StyledForm>
   );
 }
 
-const Demo = (props) => {
-  return (
-    <Panel
-      // {...CollapsePanelProps}
-      // header={"header"}
-      // key={index}
-      // forceRender
-      // // extra={genExtra()}
-      {...props}
-    >
-      hello
-    </Panel>
-  );
-};
+// const Demo = (props) => {
+//   return (
+//     <Panel
+//       // {...CollapsePanelProps}
+//       // header={"header"}
+//       // key={index}
+//       // forceRender
+//       // // extra={genExtra()}
+//       {...props}
+//     >
+//       hello
+//     </Panel>
+//   );
+// };
 
 export default QuizeForm;

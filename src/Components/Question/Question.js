@@ -1,15 +1,17 @@
 import React from "react";
-import { Button, Input, Space } from "antd";
+import { Button, Input, Space, Collapse } from "antd";
 
-function Question({ question }) {
+const { Panel } = Collapse;
+
+function Question(props) {
   //   console.log({ question });
-  const { id, questiontext, options } = question;
+  const { id, questiontext, options } = props.question;
   return (
-    <div>
+    <Panel {...props} header={<p>{`${id}. ${questiontext}`}</p>}>
       {options.map((option, index) => (
         <p>{option.optionText}</p>
       ))}
-    </div>
+    </Panel>
   );
 }
 
