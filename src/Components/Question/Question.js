@@ -8,9 +8,11 @@ import { Button, Input, Space, Collapse } from "antd";
 import { ItemTypes } from "../../constants";
 import { useDrag, useDrop } from "react-dnd";
 
+//destructing necessary things
 const { QUESTION } = ItemTypes;
 const { Panel } = Collapse;
 
+//********COMPONENT DEFINITION*******
 function Question(props) {
   const { id, questiontext, options } = props.question;
   const { index, sortQuestionHandler } = props;
@@ -23,9 +25,6 @@ function Question(props) {
       };
     },
     hover(item, monitor) {
-      //debugging
-      console.log({ item, hoveredOver: id });
-
       if (!ref.current) {
         return;
       }
@@ -72,9 +71,7 @@ function Question(props) {
   const opacity = isDragging ? 0 : 1;
   drag(drop(ref));
 
-  useEffect(() => {
-    // console.log(ref.current);
-  });
+  useEffect(() => {});
   //   console.log({ question });
 
   const antdProps = { ...props };

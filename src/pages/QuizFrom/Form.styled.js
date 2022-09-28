@@ -26,15 +26,14 @@ export const StyledQuestionSection = styled.section`
       all: unset;
       width: 100%;
       text-transform: capitalize;
-      &:nth-of-type(1) {
-        height: 50px;
-        font-size: 2rem;
-      }
-      &:nth-of-type(2) {
-        height: 25px;
-        font-size: 1rem;
-      }
+      height: 50px;
+      font-size: 2rem;
     }
+  }
+  & textarea {
+    text-transform: capitalize;
+    outline: none;
+    border: none;
   }
   &:nth-of-type(2) {
     margin-top: calc(1em + 20px);

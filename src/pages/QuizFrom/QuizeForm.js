@@ -16,92 +16,91 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
 //importing data
-import { questions, initialFormState } from "../../constants";
+import { initialQuizState } from "../../constants";
+import { convertLegacyProps } from "antd/lib/button/button";
+
+const getCachedState = (key) => {
+  const cachedState =
+    localStorage.getItem(key) && JSON.parse(localStorage.getItem(key));
+  return cachedState;
+};
 
 //********COMPONENT DEFINITION*******
 function QuizeForm() {
-  const [quizeFormStates, setQuizeFormStates] = useState({});
-
   const { formId } = useParams();
-  const [questionsList, setQuestionList] = useState([...questions]);
-  // console.log({ formId, questionsList });
+  const [quizeFormStates, setQuizeFormStates] = useState(
+    getCachedState("quizeFormStates") || initialQuizState
+  );
 
-  //**this effect will be called first */
+  const { quizeImage, quizeDescription, quizeText } = quizeFormStates;
+
   useEffect(() => {
-    const localQuizeFormStates = JSON.parse(
-      localStorage.getItem("quizeFormStates")
-    );
-    if (localQuizeFormStates) {
-      localStorage.setItem("quizeFormStates", JSON.stringify(quizeFormStates));
-    }
-    return () => {};
+    localStorage.setItem("quizeFormStates", JSON.stringify(quizeFormStates));
   }, [quizeFormStates]);
 
-  //**this effect will be called last */
   useEffect(() => {
     try {
-      const localQuizList = JSON.parse(localStorage.getItem("quizes"));
-      if (localQuizList) {
-        //after retrieving the formstate for corresponding formId from the localStorage key of "quizes" now update the localState and  localStorage key of "quizeFormStates"  with the retrieved state
-        console.log("1.opened an existing quiz");
-        const quizLocalIndex = localQuizList?.findIndex((quiz, index) => {
+      const localQuizList = getCachedState("quizes");
+      const quizLocalIndex =
+        localQuizList &&
+        localQuizList?.findIndex((quiz, index) => {
           return quiz.id === formId;
         });
-        if (quizLocalIndex !== -1) {
-          console.log("2.opened an existing quiz");
-          setQuizeFormStates(localQuizList[quizLocalIndex]);
-          localStorage.setItem(
-            "quizeFormStates",
-            JSON.stringify(localQuizList[quizLocalIndex])
-          );
-        }
-      } else {
-        //retrieve the formstate from the localStorage key of "quizeFormStates"
-        const localQuizeFormStates = JSON.parse(
-          localStorage.getItem("quizeFormStates")
+
+      if (quizLocalIndex) {
+        console.log("test6>>>opened an existing form");
+
+        setQuizeFormStates(localQuizList[quizLocalIndex]);
+        localStorage.setItem(
+          "quizeFormStates",
+          JSON.stringify(localQuizList[quizLocalIndex])
         );
-        if (localQuizeFormStates) {
-          //****updating the local state with retrieved value and will be used when we will reload the page***
-          console.log("page reloading");
-          setQuizeFormStates(localQuizeFormStates);
-        } else {
-          //****  set a new localStorage key of "quizeFormStates" and will be used when we will create a new quiz***
-          console.log("creating a form");
-          localStorage.setItem(
-            "quizeFormStates",
-            JSON.stringify(initialFormState)
-          );
-        }
       }
-      return () => {
-        localStorage.removeItem("quizeFormStates");
-      };
     } catch (error) {
-      console.log({ error });
+      console.log({ error, stack: error.stack });
     }
   }, []);
 
   const sortQuestionHandler = useCallback((dragIndex, hoverIndex) => {
-    // console.log("sortQuestionHandler called");
-    setQuestionList((prevQuestions) =>
-      update(prevQuestions, {
-        $splice: [
-          [dragIndex, 1],
-          [hoverIndex, 0, prevQuestions[dragIndex]],
-        ],
-      })
-    );
+    setQuizeFormStates((prevQuizState) => ({
+      ...prevQuizState,
+      quizQuestions: [
+        ...update([...prevQuizState.quizQuestions], {
+          $splice: [
+            [dragIndex, 1],
+            [hoverIndex, 0, prevQuizState.quizQuestions[dragIndex]],
+          ],
+        }),
+      ],
+    }));
   }, []);
 
   const submitHandler = (e) => {
     e.preventDefault();
   };
 
+  const handleQuizChange = (e) => {
+    setQuizeFormStates({ ...quizeFormStates, [e.target.name]: e.target.value });
+  };
+
   return (
     <StyledForm>
       <StyledQuestionSection>
-        <Input type="text" placeholder="Untitled Quiz" />
-        <Input type="text" placeholder="Quiz Description" />
+        <Input
+          type="text"
+          placeholder="Untitled Quiz"
+          value={quizeText}
+          onChange={handleQuizChange}
+          name="quizeText"
+        />
+        <Input.TextArea
+          placeholder="Quiz Description"
+          value={quizeDescription}
+          rows={4}
+          autoSize={{ minRows: 2, maxRows: 6 }}
+          onChange={handleQuizChange}
+          name="quizeDescription"
+        />
       </StyledQuestionSection>
       <DndProvider backend={HTML5Backend}>
         <StyledQuestionSection>
@@ -111,7 +110,7 @@ function QuizeForm() {
             accordion
             onChange={(key) => {}}
           >
-            {questionsList?.map((question, index) => (
+            {quizeFormStates?.quizQuestions?.map((question, index) => (
               <Question
                 key={question.id}
                 question={question}
