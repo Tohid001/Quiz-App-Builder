@@ -3,16 +3,12 @@ import { qizContext } from "../../pages/QuizFrom/QuizeForm";
 import OptionComponent from "./Option";
 
 import useDidMountEffect from "../../Hooks/úseDIdMount";
+import { Button } from "antd";
+import { newOption } from "../../constants";
 
 function Options({ options, questionId, questionType }) {
   const { updateQuestionHandler } = useContext(qizContext);
   const [currentOptions, setCurrentOptions] = useState(options);
-
-  console.log({ currentOptions });
-
-  //   useEffect(() => {
-  //     updateQuestionHandler(questionId, { options: currentOptions });
-  //   }, [currentOptions]);
 
   useDidMountEffect(() => {
     updateQuestionHandler(questionId, { options: currentOptions });
@@ -54,6 +50,19 @@ function Options({ options, questionId, questionType }) {
           deleteOptionHandler={deleteOptionHandler}
         />
       ))}
+      <div
+        style={{ display: "flex", justifyContent: "center", padding: "1em" }}
+      >
+        <Button
+          size="large"
+          type="primary"
+          onClick={() => {
+            setCurrentOptions([...currentOptions, newOption]);
+          }}
+        >
+          Add option
+        </Button>
+      </div>
     </>
   );
 }

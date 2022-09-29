@@ -7,10 +7,17 @@ export const newQuestion = {
   questionType: "radio",
   questionimageUrl: "",
   options: [
-    { optionText: "", optionImageUrl: "" },
-    { optionText: "", optionImageUrl: "" },
+    { optionText: "", optionImageUrl: "", isCorrect: false },
+    { optionText: "", optionImageUrl: "", isCorrect: false },
   ],
   open: true,
+  points: 0,
+};
+
+export const newOption = {
+  optionText: "",
+  optionImageUrl: "",
+  isCorrect: false,
 };
 
 export const initialQuizState = {
