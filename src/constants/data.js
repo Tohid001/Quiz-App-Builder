@@ -2,6 +2,14 @@ export const ItemTypes = {
   QUESTION: "question",
 };
 
+export const newQuestion = {
+  questiontext: "",
+  questionType: "radio",
+  options: [{ optionText: "" }],
+  open: true,
+  required: false,
+};
+
 export const initialQuizState = {
   id: 1,
   quizeText: "",
@@ -31,7 +39,7 @@ export const initialQuizState = {
         { optionText: "option 3" },
         { optionText: "option 4" },
       ],
-      open: true,
+      open: false,
       required: false,
     },
     {
@@ -44,7 +52,7 @@ export const initialQuizState = {
         { optionText: "option 3" },
         { optionText: "option 4" },
       ],
-      open: true,
+      open: false,
       required: false,
     },
   ],

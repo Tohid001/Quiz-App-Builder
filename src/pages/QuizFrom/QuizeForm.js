@@ -9,7 +9,11 @@ import { Question } from "../../Components";
 
 ///importing ui's
 import { Button, Collapse, Input, Space, CollapsePanelProps } from "antd";
-import { StyledForm, StyledQuestionSection } from "./Form.styled";
+import {
+  StyledForm,
+  StyledQuestionSection,
+  StledAddQuestionButton,
+} from "./Form.styled";
 
 //importing dnd utilities
 import { DndProvider } from "react-dnd";
@@ -17,7 +21,9 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 
 //importing data
 import { initialQuizState } from "../../constants";
-import { convertLegacyProps } from "antd/lib/button/button";
+
+import { newQuestion } from "../../constants";
+import { v4 as uuidv4 } from "uuid";
 
 const getCachedState = (key) => {
   const cachedState =
@@ -33,11 +39,21 @@ function QuizeForm() {
     getCachedState(formId) || initialQuizState
   );
 
-  const { quizeImage, quizeDescription, quizeText } = quizeFormStates;
+  const { quizQuestions, quizeDescription, quizeText } = quizeFormStates;
 
-  useEffect(() => {
-    localStorage.setItem(formId, JSON.stringify(quizeFormStates));
-  }, [quizeFormStates]);
+  const openedQuestionIndex = quizQuestions?.findIndex((question, index) => {
+    return question.open;
+  });
+
+  const [expandedQuestion, setExpandedQuestion] = useState(
+    quizQuestions[openedQuestionIndex].id.toString()
+  );
+
+  const [defaultActiveKey, setDefaultActiveKey] = useState(
+    quizQuestions[openedQuestionIndex].id
+  );
+
+  console.log({ defaultActiveKey, expandedQuestion });
 
   useEffect(() => {
     try {
@@ -62,6 +78,10 @@ function QuizeForm() {
     }
   }, []);
 
+  useEffect(() => {
+    localStorage.setItem(formId, JSON.stringify(quizeFormStates));
+  }, [quizeFormStates]);
+
   const sortQuestionHandler = useCallback((dragIndex, hoverIndex) => {
     setQuizeFormStates((prevQuizState) => ({
       ...prevQuizState,
@@ -78,10 +98,35 @@ function QuizeForm() {
 
   const submitHandler = (e) => {
     e.preventDefault();
+    localStorage.removeItem(formId);
   };
 
   const handleQuizChange = (e) => {
     setQuizeFormStates({ ...quizeFormStates, [e.target.name]: e.target.value });
+  };
+
+  const addQuestionHandler = (index) => {
+    const newQuestions = [...quizQuestions];
+    newQuestions.splice(index + 1, 0, {
+      ...newQuestion,
+      id: quizQuestions?.length + 1,
+    });
+
+    setQuizeFormStates((prevQuizState) => {
+      return {
+        ...prevQuizState,
+        quizQuestions: newQuestions.map((question) => {
+          if (question.id.toString() === defaultActiveKey.toString()) {
+            console.log("closed", question.id);
+            return { ...question, open: false };
+          }
+          return question;
+        }),
+      };
+    });
+    setDefaultActiveKey(newQuestions.length);
+
+    // setDefaultActiveKey(1);
   };
 
   return (
@@ -103,13 +148,19 @@ function QuizeForm() {
           name="quizeDescription"
         />
       </StyledQuestionSection>
+
       <DndProvider backend={HTML5Backend}>
         <StyledQuestionSection>
           <Collapse
             style={{ background: "transparent" }}
             bordered={false}
             accordion
-            onChange={(key) => {}}
+            onChange={(key) => {
+              console.log({ key });
+              setExpandedQuestion(key);
+            }}
+            defaultActiveKey={defaultActiveKey}
+            // activeKey={defaultActiveKey}
           >
             {quizeFormStates?.quizQuestions?.map((question, index) => (
               <Question
@@ -117,6 +168,8 @@ function QuizeForm() {
                 question={question}
                 sortQuestionHandler={sortQuestionHandler}
                 index={index}
+                expandedQuestion={expandedQuestion}
+                addQuestionHandler={addQuestionHandler}
               />
             ))}
           </Collapse>

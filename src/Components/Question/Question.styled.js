@@ -34,3 +34,13 @@ export const StyledQuesTionContainer = styled.div`
     /* height: 50px; */
   }
 `;
+
+export const StyledRibbon = styled.div`
+  position: absolute;
+  top: 0;
+  height: 0;
+  left: 0;
+  background-color: black;
+
+  /* z-index: 20; */
+`;

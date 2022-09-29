@@ -1,3 +1,3 @@
-import { ItemTypes, initialQuizState } from "./data.js";
+import { ItemTypes, initialQuizState, newQuestion } from "./data.js";
 
-export { ItemTypes, initialQuizState };
+export { ItemTypes, initialQuizState, newQuestion };

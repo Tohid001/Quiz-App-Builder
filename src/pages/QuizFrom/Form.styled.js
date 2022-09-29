@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Form } from "antd";
+import { Form, Button } from "antd";
 
 export const StyledForm = styled(Form)`
   background-color: rgb(212, 173, 237);
@@ -44,4 +44,11 @@ export const StyledQuestionSection = styled.section`
     background-color: transparent;
     padding: 0;
   }
+`;
+
+export const StledAddQuestionButton = styled(Button)`
+  position: fixed;
+  top: 20%;
+  padding: 1em;
+  transform: translateY(50%);
 `;
