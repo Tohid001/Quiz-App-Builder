@@ -73,8 +73,7 @@ function OptionComponent({
     });
   };
 
-  const disableDeleteButton =
-    totalOptions === index + 1 || totalOptions - 2 === index;
+  const disableDeleteButton = totalOptions > 2;
 
   return (
     <>
@@ -125,7 +124,7 @@ function OptionComponent({
           onClick={() => {
             deleteOptionHandler(index);
           }}
-          disabled={disableDeleteButton}
+          disabled={!disableDeleteButton}
           style={{
             fontSize: "24px",
             padding: "5px",
@@ -133,7 +132,7 @@ function OptionComponent({
 
             border: "none",
             outline: "none",
-            background: `${disableDeleteButton ? "gray" : "transparent"}`,
+            background: `${!disableDeleteButton ? "gray" : "transparent"}`,
           }}
         >
           <CloseCircleOutlined />
