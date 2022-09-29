@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 
-import { Input, Space, Button, Select } from "antd";
+import ModalComponent from "./Modal";
+import ImageComponent from "./Image";
+import { Input, Select } from "antd";
 import { PictureOutlined } from "@ant-design/icons";
 import { StyledQuestionHeader } from "./Question.styled";
 
@@ -15,7 +17,6 @@ function QuestionHeader({ question, serial, updateQuestionHandler }) {
     questionType,
     questionimageUrl,
   });
-
   const {
     questiontext: questiontextState,
     questionType: questionTypeState,
@@ -24,9 +25,28 @@ function QuestionHeader({ question, serial, updateQuestionHandler }) {
 
   console.log({ questionHeaderStates });
 
+  const [showModal, setShowMoDal] = useState(false);
+
   const handleQuestionHeaderChange = (e) => {
     setQuestionHeaderStates((prev) => {
       return { ...prev, [e.target.name]: e.target.value };
+    });
+  };
+
+  const okHandler = (payload) => {
+    setQuestionHeaderStates((prev) => {
+      return { ...prev, ...payload };
+    });
+    setShowMoDal(false);
+  };
+
+  const cancelHandler = () => {
+    setShowMoDal(false);
+  };
+
+  const deleteImageUrlHandler = () => {
+    setQuestionHeaderStates((prev) => {
+      return { ...prev, questionimageUrl: "" };
     });
   };
 
@@ -35,36 +55,56 @@ function QuestionHeader({ question, serial, updateQuestionHandler }) {
   }, [questionHeaderStates]);
 
   return (
-    <StyledQuestionHeader>
-      <Input
-        addonBefore={<label>{`${serial}.`}</label>}
-        placeholder="Untitled Question"
-        name="questiontext"
-        value={questiontextState}
-        onChange={handleQuestionHeaderChange}
-      />
+    <>
+      <StyledQuestionHeader>
+        <ModalComponent
+          showModal={showModal}
+          okHandler={okHandler}
+          cancelHandler={cancelHandler}
+          value={questionimageUrlState}
+          name="questionimageUrl"
+        />
+        <Input
+          addonBefore={<label>{`${serial}.`}</label>}
+          placeholder="Untitled Question"
+          name="questiontext"
+          value={questiontextState}
+          onChange={handleQuestionHeaderChange}
+        />
 
-      <div>
-        <span>
-          <PictureOutlined />
-        </span>
-      </div>
-      <div>
-        <Select
-          defaultValue="radio"
-          value={questionTypeState}
-          name="questionType"
-          onChange={(value) => {
-            setQuestionHeaderStates((prev) => {
-              return { ...prev, questionType: value };
-            });
-          }}
-        >
-          <Option value="radio">Single selection</Option>
-          <Option value="checkbox">Multiple selection</Option>
-        </Select>
-      </div>
-    </StyledQuestionHeader>
+        <div>
+          <span
+            onClick={() => {
+              setShowMoDal(true);
+            }}
+          >
+            <PictureOutlined />
+          </span>
+        </div>
+        <div>
+          <Select
+            defaultValue="radio"
+            value={questionTypeState}
+            name="questionType"
+            onChange={(value) => {
+              setQuestionHeaderStates((prev) => {
+                return { ...prev, questionType: value };
+              });
+            }}
+          >
+            <Option value="radio">Single selection</Option>
+            <Option value="checkbox">Multiple selection</Option>
+          </Select>
+        </div>
+      </StyledQuestionHeader>
+      {questionimageUrl && (
+        <ImageComponent
+          src={questionimageUrl}
+          onErrorHandler={deleteImageUrlHandler}
+          deleteImageUrlHandler={deleteImageUrlHandler}
+        />
+      )}
+    </>
   );
 }
 

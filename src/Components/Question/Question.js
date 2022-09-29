@@ -5,7 +5,7 @@ import QuestionHeader from "./QuestionHeader";
 
 //import ui's
 import { StyledQuesTionContainer, StyledRibbon } from "./Question.styled";
-import { Button, Input, Space, Collapse, Tooltip } from "antd";
+import { Button, Input, Space, Collapse, Tooltip, Image } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 
 //importing dnd utilities

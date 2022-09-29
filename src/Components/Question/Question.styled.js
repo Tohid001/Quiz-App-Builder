@@ -49,7 +49,7 @@ export const StyledQuestionHeader = styled.div`
   display: flex;
   flex-direction: column;
   padding: 1em;
-
+  /* flex-wrap: wrap; */
   & div {
     &:nth-of-type(1) {
       display: flex;
@@ -80,5 +80,30 @@ export const StyledQuestionHeader = styled.div`
         }
       }
     }
+  }
+`;
+
+export const StyledImageContainer = styled.div`
+  padding: 20px;
+  position: relative;
+
+  width: fit-content;
+  & image {
+    display: block;
+    object-position: center;
+    object-fit: cover;
+    width: 200px;
+    aspect-ratio: 1/1;
+    z-index: -1;
+  }
+  & span {
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0.5em;
+    z-index: 2;
+    font-size: 24px;
+    background-color: rgba(235, 9, 9, 0.3);
   }
 `;
