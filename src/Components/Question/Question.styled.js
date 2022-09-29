@@ -84,7 +84,7 @@ export const StyledQuestionHeader = styled.div`
 `;
 
 export const StyledImageContainer = styled.div`
-  padding: 20px;
+  padding: 30px;
   position: relative;
 
   width: fit-content;
@@ -101,7 +101,9 @@ export const StyledImageContainer = styled.div`
     position: absolute;
     top: 0;
     right: 0;
-    padding: 0.5em;
+    /* padding: 0.5em; */
+    width: 30px;
+    aspect-ratio: 1/1;
     z-index: 2;
     font-size: 24px;
     background-color: rgba(235, 9, 9, 0.3);

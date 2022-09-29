@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, createContext } from "react";
 
 //import utility
 import update from "immutability-helper";
@@ -26,6 +26,7 @@ const getCachedState = (key) => {
   return cachedState;
 };
 
+export const qizContext = createContext(null);
 //********COMPONENT DEFINITION*******
 function QuizeForm() {
   const { formId } = useParams();
@@ -135,6 +136,10 @@ function QuizeForm() {
     });
   };
 
+  // const updateQuestionImageHandler=(questionId)=>{
+
+  // }
+
   const updateQuestionHandler = (questionId, payload) => {
     setQuizeFormStates((prev) => {
       return {
@@ -150,53 +155,57 @@ function QuizeForm() {
   };
 
   return (
-    <StyledForm>
-      <StyledQuestionSection>
-        <Input
-          type="text"
-          placeholder="Untitled Quiz"
-          value={quizeText}
-          onChange={handleQuizChange}
-          name="quizeText"
-        />
-        <Input.TextArea
-          placeholder="Quiz Description"
-          value={quizeDescription}
-          rows={4}
-          autoSize={{ minRows: 2, maxRows: 6 }}
-          onChange={handleQuizChange}
-          name="quizeDescription"
-        />
-      </StyledQuestionSection>
-
-      <DndProvider backend={HTML5Backend}>
+    <qizContext.Provider
+      value={{
+        quizeFormStates,
+        addQuestionHandler,
+        deleteQuestionHandler,
+        sortQuestionHandler,
+        updateQuestionHandler,
+        defaultActiveKey,
+        expandedQuestion,
+      }}
+    >
+      <StyledForm>
         <StyledQuestionSection>
-          <Collapse
-            style={{ background: "transparent" }}
-            bordered={false}
-            accordion
-            onChange={(key) => {
-              console.log({ key });
-              setExpandedQuestion(key);
-            }}
-            defaultActiveKey={defaultActiveKey}
-            // activeKey={defaultActiveKey}
-          >
-            {quizeFormStates?.quizQuestions?.map((question, index) => (
-              <Question
-                key={question.id}
-                question={question}
-                sortQuestionHandler={sortQuestionHandler}
-                index={index}
-                expandedQuestion={expandedQuestion}
-                addQuestionHandler={addQuestionHandler}
-                updateQuestionHandler={updateQuestionHandler}
-              />
-            ))}
-          </Collapse>
+          <Input
+            type="text"
+            placeholder="Untitled Quiz"
+            value={quizeText}
+            onChange={handleQuizChange}
+            name="quizeText"
+          />
+          <Input.TextArea
+            placeholder="Quiz Description"
+            value={quizeDescription}
+            rows={4}
+            autoSize={{ minRows: 2, maxRows: 6 }}
+            onChange={handleQuizChange}
+            name="quizeDescription"
+          />
         </StyledQuestionSection>
-      </DndProvider>
-    </StyledForm>
+
+        <DndProvider backend={HTML5Backend}>
+          <StyledQuestionSection>
+            <Collapse
+              style={{ background: "transparent" }}
+              bordered={false}
+              accordion
+              onChange={(key) => {
+                console.log({ key });
+                setExpandedQuestion(key);
+              }}
+              defaultActiveKey={defaultActiveKey}
+              // activeKey={defaultActiveKey}
+            >
+              {quizeFormStates?.quizQuestions?.map((question, index) => (
+                <Question key={question.id} question={question} index={index} />
+              ))}
+            </Collapse>
+          </StyledQuestionSection>
+        </DndProvider>
+      </StyledForm>
+    </qizContext.Provider>
   );
 }
 

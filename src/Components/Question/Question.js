@@ -1,4 +1,5 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useContext } from "react";
+import { qizContext } from "../../pages/QuizFrom/QuizeForm";
 
 //import components
 import QuestionHeader from "./QuestionHeader";
@@ -18,15 +19,15 @@ const { Panel } = Collapse;
 
 //********COMPONENT DEFINITION*******
 function Question(props) {
-  const { id, questiontext, options, questionType, questionimageUrl } =
-    props.question;
   const {
-    index,
     sortQuestionHandler,
     expandedQuestion,
     addQuestionHandler,
     updateQuestionHandler,
-  } = props;
+  } = useContext(qizContext);
+  const { id, questiontext, options, questionType, questionimageUrl } =
+    props.question;
+  const { index } = props;
   // console.log({ expandedQuestion, id, index });
   const ref = useRef(null);
   const [{ handlerId }, drop] = useDrop({
@@ -83,8 +84,8 @@ function Question(props) {
   const opacity = isDragging ? 0 : 1;
   drag(drop(ref));
 
-  useEffect(() => {});
-  //   console.log({ question });
+  // useEffect(() => {});
+  // //   console.log({ question });
 
   const antdProps = { ...props };
   return (
@@ -115,13 +116,7 @@ function Question(props) {
       <Panel
         {...antdProps}
         showArrow={false}
-        header={
-          <QuestionHeader
-            updateQuestionHandler={updateQuestionHandler}
-            serial={index + 1}
-            question={props.question}
-          />
-        }
+        header={<QuestionHeader serial={index + 1} question={props.question} />}
       >
         {options.map((option, index) => (
           <p key={index}>{option.optionText}</p>

@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { qizContext } from "../../pages/QuizFrom/QuizeForm";
 
 import ModalComponent from "./Modal";
 import ImageComponent from "./Image";
@@ -8,7 +9,8 @@ import { StyledQuestionHeader } from "./Question.styled";
 
 const { Option } = Select;
 
-function QuestionHeader({ question, serial, updateQuestionHandler }) {
+function QuestionHeader({ question, serial }) {
+  const { updateQuestionHandler } = useContext(qizContext);
   const { id, questiontext, options, questionType, questionimageUrl } =
     question;
   //   console.log({ question });
@@ -48,6 +50,7 @@ function QuestionHeader({ question, serial, updateQuestionHandler }) {
     setQuestionHeaderStates((prev) => {
       return { ...prev, questionimageUrl: "" };
     });
+    alert("deleted the imageURL");
   };
 
   useEffect(() => {
