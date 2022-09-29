@@ -14,7 +14,7 @@ export const StyledForm = styled(Form)`
 `;
 
 export const StyledQuestionSection = styled.section`
-  width: 75%;
+  width: 90%;
   background-color: white;
   border-radius: 10px;
   padding: 10px;

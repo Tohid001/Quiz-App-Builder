@@ -1,5 +1,8 @@
 import React, { useRef, useEffect } from "react";
 
+//import components
+import QuestionHeader from "./QuestionHeader";
+
 //import ui's
 import { StyledQuesTionContainer, StyledRibbon } from "./Question.styled";
 import { Button, Input, Space, Collapse, Tooltip } from "antd";
@@ -15,9 +18,15 @@ const { Panel } = Collapse;
 
 //********COMPONENT DEFINITION*******
 function Question(props) {
-  const { id, questiontext, options } = props.question;
-  const { index, sortQuestionHandler, expandedQuestion, addQuestionHandler } =
-    props;
+  const { id, questiontext, options, questionType, questionimageUrl } =
+    props.question;
+  const {
+    index,
+    sortQuestionHandler,
+    expandedQuestion,
+    addQuestionHandler,
+    updateQuestionHandler,
+  } = props;
   // console.log({ expandedQuestion, id, index });
   const ref = useRef(null);
   const [{ handlerId }, drop] = useDrop({
@@ -103,7 +112,17 @@ function Question(props) {
         </Button>
       </Tooltip>
 
-      <Panel {...antdProps} header={<p>{`${index + 1}. ${questiontext}`}</p>}>
+      <Panel
+        {...antdProps}
+        showArrow={false}
+        header={
+          <QuestionHeader
+            updateQuestionHandler={updateQuestionHandler}
+            serial={index + 1}
+            question={props.question}
+          />
+        }
+      >
         {options.map((option, index) => (
           <p key={index}>{option.optionText}</p>
         ))}

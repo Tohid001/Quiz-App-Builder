@@ -9,21 +9,16 @@ import { Question } from "../../Components";
 
 ///importing ui's
 import { Button, Collapse, Input, Space, CollapsePanelProps } from "antd";
-import {
-  StyledForm,
-  StyledQuestionSection,
-  StledAddQuestionButton,
-} from "./Form.styled";
+import { StyledForm, StyledQuestionSection } from "./Form.styled";
 
 //importing dnd utilities
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
 //importing data
-import { initialQuizState } from "../../constants";
+import { initialQuizState, newQuestion } from "../../constants";
 
-import { newQuestion } from "../../constants";
-import { v4 as uuidv4 } from "uuid";
+// import { v4 as uuidv4 } from "uuid";
 
 const getCachedState = (key) => {
   const cachedState =
@@ -39,6 +34,8 @@ function QuizeForm() {
     getCachedState(formId) || initialQuizState
   );
 
+  console.log({ quizeFormStates });
+
   const { quizQuestions, quizeDescription, quizeText } = quizeFormStates;
 
   const openedQuestionIndex = quizQuestions?.findIndex((question, index) => {
@@ -53,7 +50,7 @@ function QuizeForm() {
     quizQuestions[openedQuestionIndex].id
   );
 
-  console.log({ defaultActiveKey, expandedQuestion });
+  // console.log({ defaultActiveKey, expandedQuestion });
 
   useEffect(() => {
     try {
@@ -124,9 +121,32 @@ function QuizeForm() {
         }),
       };
     });
-    setDefaultActiveKey(newQuestions.length);
+    // setDefaultActiveKey(newQuestions.length);
+  };
 
-    // setDefaultActiveKey(1);
+  const deleteQuestionHandler = (questionId) => {
+    setQuizeFormStates((prev) => {
+      return {
+        ...prev,
+        quizQuestions: prev.quizQuestions.filter((question) => {
+          return !(question.id.toString() === questionId.toString());
+        }),
+      };
+    });
+  };
+
+  const updateQuestionHandler = (questionId, payload) => {
+    setQuizeFormStates((prev) => {
+      return {
+        ...prev,
+        quizQuestions: prev.quizQuestions.map((question) => {
+          if (question.id.toString() === questionId.toString()) {
+            return { ...question, ...payload };
+          }
+          return question;
+        }),
+      };
+    });
   };
 
   return (
@@ -170,6 +190,7 @@ function QuizeForm() {
                 index={index}
                 expandedQuestion={expandedQuestion}
                 addQuestionHandler={addQuestionHandler}
+                updateQuestionHandler={updateQuestionHandler}
               />
             ))}
           </Collapse>

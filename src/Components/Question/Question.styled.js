@@ -28,9 +28,9 @@ export const StyledQuesTionContainer = styled.div`
 
   //found a way around to fix the layout of panel header-antd@4.23.2
   & .ant-collapse-header {
-    display: flex;
-    gap: 10px;
-    cursor: pointer;
+    /* display: flex; */
+    /* gap: 10px; */
+    /* cursor: pointer; */
     /* height: 50px; */
   }
 `;
@@ -43,4 +43,42 @@ export const StyledRibbon = styled.div`
   background-color: black;
 
   /* z-index: 20; */
+`;
+
+export const StyledQuestionHeader = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 1em;
+
+  & div {
+    &:nth-of-type(1) {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 25px;
+      padding: 5px;
+    }
+  }
+
+  @media (min-width: 600px) {
+    flex-direction: row;
+    & input {
+      flex-basis: 40%;
+    }
+    & div {
+      &:nth-of-type(1) {
+        flex-basis: 20%;
+        padding: 0px;
+        & span {
+          cursor: pointer;
+        }
+      }
+      &:nth-of-type(2) {
+        flex-basis: 40%;
+        & select {
+          width: 100%;
+        }
+      }
+    }
+  }
 `;
