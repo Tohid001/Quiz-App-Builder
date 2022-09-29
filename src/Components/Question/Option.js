@@ -6,6 +6,7 @@ import ImageComponent from "./Image";
 import { Input } from "antd";
 import { PictureOutlined, CloseCircleOutlined } from "@ant-design/icons";
 import { StyledQuestionHeader } from "./Question.styled";
+import useDidMountEffect from "../../Hooks/úseDIdMount";
 
 function OptionComponent({
   option,
@@ -34,7 +35,11 @@ function OptionComponent({
 
   const [showModal, setShowMoDal] = useState(false);
 
-  useEffect(() => {
+  // useEffect(() => {
+  //   updateOptionsHandler(index, optionStates);
+  // }, [optionStates]);
+
+  useDidMountEffect(() => {
     updateOptionsHandler(index, optionStates);
   }, [optionStates]);
 

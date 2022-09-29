@@ -2,13 +2,19 @@ import React, { useState, useEffect, useContext } from "react";
 import { qizContext } from "../../pages/QuizFrom/QuizeForm";
 import OptionComponent from "./Option";
 
+import useDidMountEffect from "../../Hooks/úseDIdMount";
+
 function Options({ options, questionId, questionType }) {
   const { updateQuestionHandler } = useContext(qizContext);
   const [currentOptions, setCurrentOptions] = useState(options);
 
   console.log({ currentOptions });
 
-  useEffect(() => {
+  //   useEffect(() => {
+  //     updateQuestionHandler(questionId, { options: currentOptions });
+  //   }, [currentOptions]);
+
+  useDidMountEffect(() => {
     updateQuestionHandler(questionId, { options: currentOptions });
   }, [currentOptions]);
 

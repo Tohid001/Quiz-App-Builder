@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
 import { qizContext } from "../../pages/QuizFrom/QuizeForm";
 
+import useDidMountEffect from "../../Hooks/úseDIdMount";
+
 import ModalComponent from "./Modal";
 import ImageComponent from "./Image";
 import { Input, Select } from "antd";
@@ -53,7 +55,11 @@ function QuestionHeader({ question, serial }) {
     alert("deleted the imageURL");
   };
 
-  useEffect(() => {
+  // useEffect(() => {
+  //   updateQuestionHandler(id, questionHeaderStates);
+  // }, [questionHeaderStates]);
+
+  useDidMountEffect(() => {
     updateQuestionHandler(id, questionHeaderStates);
   }, [questionHeaderStates]);
 
