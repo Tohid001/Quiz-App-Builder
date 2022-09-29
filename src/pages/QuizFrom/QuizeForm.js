@@ -3,6 +3,8 @@ import React, { useState, useEffect, useCallback, createContext } from "react";
 //import utility
 import update from "immutability-helper";
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import useDidMountEffect from "../../Hooks/úseDIdMount";
 
 //importing my components
 import { Question } from "../../Components";
@@ -19,17 +21,14 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import { initialQuizState, newQuestion } from "../../constants";
 
 // import { v4 as uuidv4 } from "uuid";
-
-const getCachedState = (key) => {
-  const cachedState =
-    localStorage.getItem(key) && JSON.parse(localStorage.getItem(key));
-  return cachedState;
-};
+import getCachedState from "../../utils/getCachedState";
 
 export const qizContext = createContext(null);
+
 //********COMPONENT DEFINITION*******
 function QuizeForm() {
   const { formId } = useParams();
+  const navigate = useNavigate();
 
   const [quizeFormStates, setQuizeFormStates] = useState(
     getCachedState(formId) || initialQuizState
@@ -54,15 +53,22 @@ function QuizeForm() {
   // console.log({ defaultActiveKey, expandedQuestion });
 
   useEffect(() => {
+    localStorage.setItem(formId, JSON.stringify(quizeFormStates));
+  }, [quizeFormStates]);
+
+  useEffect(() => {
     try {
       const localQuizList = getCachedState("quizes");
+      console.log({ localQuizList });
       const quizLocalIndex =
         localQuizList &&
-        localQuizList?.findIndex((quiz, index) => {
+        localQuizList.findIndex((quiz, index) => {
           return quiz.id === formId;
         });
 
-      if (quizLocalIndex) {
+      console.log({ quizLocalIndex });
+
+      if (quizLocalIndex !== -1 || quizLocalIndex == 0) {
         console.log("test6>>>opened an existing form");
 
         setQuizeFormStates(localQuizList[quizLocalIndex]);
@@ -75,10 +81,6 @@ function QuizeForm() {
       console.log({ error, stack: error.stack });
     }
   }, []);
-
-  useEffect(() => {
-    localStorage.setItem(formId, JSON.stringify(quizeFormStates));
-  }, [quizeFormStates]);
 
   const sortQuestionHandler = useCallback((dragIndex, hoverIndex) => {
     setQuizeFormStates((prevQuizState) => ({
@@ -96,7 +98,37 @@ function QuizeForm() {
 
   const submitHandler = (e) => {
     e.preventDefault();
+    const quizes = getCachedState("quizes");
+    if (quizes) {
+      const existingFormIndex = quizes?.findIndex((quiz, index) => {
+        return quiz.id === formId;
+      });
+      if (existingFormIndex !== -1) {
+        localStorage.setItem(
+          "quizes",
+          JSON.stringify(
+            quizes.map((quiz, index) => {
+              if (quiz.id === formId) {
+                return { ...quizeFormStates };
+              }
+            })
+          )
+        );
+      } else {
+        localStorage.setItem(
+          "quizes",
+          JSON.stringify([...quizes, { ...quizeFormStates, id: formId }])
+        );
+      }
+    } else {
+      console.log("new");
+      localStorage.setItem(
+        "quizes",
+        JSON.stringify([{ ...quizeFormStates, id: formId }])
+      );
+    }
     localStorage.removeItem(formId);
+    navigate("/");
   };
 
   const handleQuizChange = (e) => {
@@ -136,10 +168,6 @@ function QuizeForm() {
     });
   };
 
-  // const updateQuestionImageHandler=(questionId)=>{
-
-  // }
-
   const updateQuestionHandler = (questionId, payload) => {
     setQuizeFormStates((prev) => {
       return {
@@ -166,7 +194,7 @@ function QuizeForm() {
         expandedQuestion,
       }}
     >
-      <StyledForm>
+      <StyledForm onSubmit={submitHandler}>
         <StyledQuestionSection>
           <Input
             type="text"
@@ -204,6 +232,9 @@ function QuizeForm() {
             </Collapse>
           </StyledQuestionSection>
         </DndProvider>
+        <Button size="large" type="primary" htmlType="submit">
+          Save Changes
+        </Button>
       </StyledForm>
     </qizContext.Provider>
   );

@@ -30,7 +30,6 @@ export const initialQuizState = {
       questiontext: "",
       questionimageUrl: "",
       questionType: "radio",
-      answer: "",
       options: [
         { optionText: "", optionImageUrl: "", isCorrect: false },
         { optionText: "", optionImageUrl: "", isCorrect: false },
