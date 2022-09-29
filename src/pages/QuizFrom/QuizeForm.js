@@ -28,14 +28,15 @@ const getCachedState = (key) => {
 //********COMPONENT DEFINITION*******
 function QuizeForm() {
   const { formId } = useParams();
+
   const [quizeFormStates, setQuizeFormStates] = useState(
-    getCachedState("quizeFormStates") || initialQuizState
+    getCachedState(formId) || initialQuizState
   );
 
   const { quizeImage, quizeDescription, quizeText } = quizeFormStates;
 
   useEffect(() => {
-    localStorage.setItem("quizeFormStates", JSON.stringify(quizeFormStates));
+    localStorage.setItem(formId, JSON.stringify(quizeFormStates));
   }, [quizeFormStates]);
 
   useEffect(() => {
@@ -52,7 +53,7 @@ function QuizeForm() {
 
         setQuizeFormStates(localQuizList[quizLocalIndex]);
         localStorage.setItem(
-          "quizeFormStates",
+          formId,
           JSON.stringify(localQuizList[quizLocalIndex])
         );
       }
