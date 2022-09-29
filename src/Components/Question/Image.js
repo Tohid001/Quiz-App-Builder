@@ -2,7 +2,7 @@ import React from "react";
 
 import { Image } from "antd";
 import { StyledImageContainer } from "./Question.styled";
-import { DeleteFilled } from "@ant-design/icons";
+import { CloseCircleOutlined } from "@ant-design/icons";
 
 function ImageComponent({
   width = "200px",
@@ -18,9 +18,10 @@ function ImageComponent({
           deleteImageUrlHandler();
         }}
       >
-        <DeleteFilled />
+        <CloseCircleOutlined />
       </span>
       <Image
+        preview={false}
         width={width}
         height={height}
         src={src}

@@ -11,7 +11,6 @@ export const newQuestion = {
     { optionText: "", optionImageUrl: "" },
   ],
   open: true,
-  required: false,
 };
 
 export const initialQuizState = {
@@ -24,12 +23,13 @@ export const initialQuizState = {
       questiontext: "",
       questionimageUrl: "",
       questionType: "radio",
+      answer: "",
       options: [
-        { optionText: "", optionImageUrl: "" },
-        { optionText: "", optionImageUrl: "" },
+        { optionText: "", optionImageUrl: "", isCorrect: false },
+        { optionText: "", optionImageUrl: "", isCorrect: false },
       ],
       open: true,
-      required: false,
+      points: 0,
     },
   ],
 };

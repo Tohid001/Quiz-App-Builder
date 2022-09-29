@@ -62,6 +62,7 @@ export const StyledQuestionHeader = styled.div`
 
   @media (min-width: 600px) {
     flex-direction: row;
+    align-items: center;
     & input {
       flex-basis: 40%;
     }
@@ -86,7 +87,6 @@ export const StyledQuestionHeader = styled.div`
 export const StyledImageContainer = styled.div`
   padding: 30px;
   position: relative;
-
   width: fit-content;
   & image {
     display: block;
@@ -102,10 +102,11 @@ export const StyledImageContainer = styled.div`
     top: 0;
     right: 0;
     /* padding: 0.5em; */
-    width: 30px;
+    /* width: 30px; */
     aspect-ratio: 1/1;
     z-index: 2;
     font-size: 24px;
-    background-color: rgba(235, 9, 9, 0.3);
+    color: black;
+    /* background-color: rgba(199, 197, 193); */
   }
 `;

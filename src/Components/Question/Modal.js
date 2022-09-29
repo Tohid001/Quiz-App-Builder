@@ -4,7 +4,7 @@ import { Input, Space, Button, Select, Modal } from "antd";
 function ModalComponent({ showModal, okHandler, cancelHandler, value, name }) {
   const [url, setUrl] = useState({ [name]: value });
 
-  console.log(" state", url);
+  // console.log(" state", url);
   return (
     <Modal
       title="By URL"

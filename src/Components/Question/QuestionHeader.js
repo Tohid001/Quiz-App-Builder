@@ -25,7 +25,7 @@ function QuestionHeader({ question, serial }) {
     questionimageUrl: questionimageUrlState,
   } = questionHeaderStates;
 
-  console.log({ questionHeaderStates });
+  // console.log({ questionHeaderStates });
 
   const [showModal, setShowMoDal] = useState(false);
 

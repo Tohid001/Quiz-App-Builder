@@ -3,6 +3,8 @@ import { qizContext } from "../../pages/QuizFrom/QuizeForm";
 
 //import components
 import QuestionHeader from "./QuestionHeader";
+import OptionComponent from "./Option";
+import Options from "./Options";
 
 //import ui's
 import { StyledQuesTionContainer, StyledRibbon } from "./Question.styled";
@@ -25,7 +27,7 @@ function Question(props) {
     addQuestionHandler,
     updateQuestionHandler,
   } = useContext(qizContext);
-  const { id, questiontext, options, questionType, questionimageUrl } =
+  const { id, questiontext, options, questionType, questionimageUrl, points } =
     props.question;
   const { index } = props;
   // console.log({ expandedQuestion, id, index });
@@ -115,12 +117,27 @@ function Question(props) {
 
       <Panel
         {...antdProps}
-        showArrow={false}
+        // showArrow={false}
         header={<QuestionHeader serial={index + 1} question={props.question} />}
       >
-        {options.map((option, index) => (
-          <p key={index}>{option.optionText}</p>
-        ))}
+        <div style={{ marginBottom: "1rem" }}>
+          <label htmlFor="points">Points:</label>
+          <input
+            id="points"
+            type="number"
+            min={0}
+            max={10}
+            value={points}
+            onChange={(e) => {
+              updateQuestionHandler(id, { points: parseInt(e.target.value) });
+            }}
+          />
+        </div>
+        <Options
+          options={options}
+          questionId={id}
+          questionType={questionType}
+        />
       </Panel>
     </StyledQuesTionContainer>
   );
