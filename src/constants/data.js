@@ -28,7 +28,7 @@ export const initialQuizState = {
 
   quizQuestions: [
     {
-      id: 1,
+      id: uuidv4(),
       questiontext: "",
       questionimageUrl: "",
       questionType: "radio",

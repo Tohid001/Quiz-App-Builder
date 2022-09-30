@@ -102,7 +102,7 @@ function Question(props) {
             aspectRatio: "1/1",
             padding: "0px",
             left: -50,
-            display: `${expandedQuestion === id.toString() ? "block" : "none"}`,
+            display: `${expandedQuestion === id ? "block" : "none"}`,
           }}
           onClick={() => {
             addQuestionHandler(id);

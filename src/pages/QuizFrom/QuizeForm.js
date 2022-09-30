@@ -48,9 +48,9 @@ function QuizeForm() {
     quizQuestions[openedQuestionIndex].id
   );
 
-  const [defaultActiveKey, setDefaultActiveKey] = useState(
-    quizQuestions[openedQuestionIndex].id
-  );
+  // const [defaultActiveKey, setDefaultActiveKey] = useState(
+  //   quizQuestions[openedQuestionIndex].id
+  // );
 
   useDidMountEffect(() => {
     localStorage.setItem(formId, JSON.stringify(quizeFormStates));
@@ -195,7 +195,7 @@ function QuizeForm() {
         deleteQuestionHandler,
         sortQuestionHandler,
         updateQuestionHandler,
-        defaultActiveKey,
+        // defaultActiveKey,
         expandedQuestion,
       }}
     >
@@ -232,7 +232,7 @@ function QuizeForm() {
                 console.log({ key });
                 setExpandedQuestion(key);
               }}
-              defaultActiveKey={defaultActiveKey}
+              // defaultActiveKey={defaultActiveKey}
               // activeKey={defaultActiveKey}
             >
               {quizeFormStates?.quizQuestions?.map((question, index) => (
