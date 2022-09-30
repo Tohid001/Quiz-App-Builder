@@ -92,6 +92,7 @@ function QuestionHeader({ question, serial }) {
         </div>
         <div>
           <Select
+            style={{ width: "200px", fontSize: "24px" }}
             defaultValue="radio"
             value={questionTypeState}
             name="questionType"
@@ -101,8 +102,8 @@ function QuestionHeader({ question, serial }) {
               });
             }}
           >
-            <Option value="radio">Single selection</Option>
-            <Option value="checkbox">Multiple selection</Option>
+            <Option value="radio">Single Selection</Option>
+            <Option value="checkbox">Multiple Selection</Option>
           </Select>
         </div>
       </StyledQuestionHeader>

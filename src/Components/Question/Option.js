@@ -24,27 +24,16 @@ function OptionComponent({
     optionImageUrl,
     isCorrect,
   });
-  const {
-    optionText: optionTextState,
-
-    optionImageUrl: optionImageUrlState,
-    isCorrect: isCorrectState,
-  } = optionStates;
-
-  console.log({ ...optionStates, index });
+  const { optionText: optionTextState, optionImageUrl: optionImageUrlState } =
+    optionStates;
 
   const [showModal, setShowMoDal] = useState(false);
-
-  // useEffect(() => {
-  //   updateOptionsHandler(index, optionStates);
-  // }, [optionStates]);
 
   useDidMountEffect(() => {
     updateOptionsHandler(index, optionStates);
   }, [optionStates]);
 
   const handleOptionChange = (e) => {
-    // console.log("e", e.target.name);
     setOptionStates((prev) => {
       return { ...prev, [e.target.name]: e.target.value };
     });
@@ -88,20 +77,12 @@ function OptionComponent({
         <Input
           addonBefore={
             <input
-              type={questionType}
+              type="checkbox"
               checked={isCorrect}
               name={`question-${questionId}`}
               value={optionTextState}
               onChange={(e) => {
-                console.log(e.target.value);
-                if (questionType == "checkbox") {
-                  console.log("cb", index, e.target.checked);
-                  correctAnswerHandler(e.target.checked);
-                } else {
-                  console.log("it's a radio");
-                  console.log("radio", e.target.checked);
-                  correctAnswerHandler(e.target.checked);
-                }
+                correctAnswerHandler(e.target.checked);
               }}
             />
           }
@@ -129,7 +110,6 @@ function OptionComponent({
             fontSize: "24px",
             padding: "5px",
             cursor: "pointer",
-
             border: "none",
             outline: "none",
             background: `${!disableDeleteButton ? "gray" : "transparent"}`,

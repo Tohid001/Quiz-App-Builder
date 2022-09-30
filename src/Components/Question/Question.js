@@ -86,9 +86,6 @@ function Question(props) {
   const opacity = isDragging ? 0 : 1;
   drag(drop(ref));
 
-  // useEffect(() => {});
-  // //   console.log({ question });
-
   const antdProps = { ...props };
   return (
     <StyledQuesTionContainer
@@ -126,7 +123,6 @@ function Question(props) {
             id="points"
             type="number"
             min={0}
-            max={10}
             value={points}
             onChange={(e) => {
               updateQuestionHandler(id, { points: parseInt(e.target.value) });
@@ -138,6 +134,7 @@ function Question(props) {
           questionId={id}
           questionType={questionType}
         />
+        <div></div>
       </Panel>
     </StyledQuesTionContainer>
   );

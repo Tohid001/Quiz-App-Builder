@@ -20,9 +20,7 @@ function Options({ options, questionId, questionType }) {
         if (index === optionIndex) {
           return { ...option, ...payload };
         }
-        return questionType === "radio"
-          ? { ...option, isCorrect: false }
-          : option;
+        return option;
       });
     });
   };

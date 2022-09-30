@@ -4,6 +4,7 @@ import React, { useState, useEffect, useCallback, createContext } from "react";
 import update from "immutability-helper";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+
 import useDidMountEffect from "../../Hooks/úseDIdMount";
 
 //importing my components
@@ -50,32 +51,28 @@ function QuizeForm() {
     quizQuestions[openedQuestionIndex].id
   );
 
-  // console.log({ defaultActiveKey, expandedQuestion });
-
-  useEffect(() => {
+  useDidMountEffect(() => {
     localStorage.setItem(formId, JSON.stringify(quizeFormStates));
   }, [quizeFormStates]);
 
   useEffect(() => {
     try {
       const localQuizList = getCachedState("quizes");
-      console.log({ localQuizList });
-      const quizLocalIndex =
-        localQuizList &&
-        localQuizList.findIndex((quiz, index) => {
+
+      if (localQuizList) {
+        const quizLocalIndex = localQuizList.findIndex((quiz, index) => {
           return quiz.id === formId;
         });
 
-      console.log({ quizLocalIndex });
+        if (quizLocalIndex !== -1) {
+          console.log("test6>>>opened an existing form");
 
-      if (quizLocalIndex !== -1 || quizLocalIndex == 0) {
-        console.log("test6>>>opened an existing form");
-
-        setQuizeFormStates(localQuizList[quizLocalIndex]);
-        localStorage.setItem(
-          formId,
-          JSON.stringify(localQuizList[quizLocalIndex])
-        );
+          setQuizeFormStates(localQuizList[quizLocalIndex]);
+        } else {
+          localStorage.setItem(formId, JSON.stringify(quizeFormStates));
+        }
+      } else {
+        localStorage.setItem(formId, JSON.stringify(quizeFormStates));
       }
     } catch (error) {
       console.log({ error, stack: error.stack });
@@ -128,7 +125,7 @@ function QuizeForm() {
       );
     }
     localStorage.removeItem(formId);
-    navigate("/");
+    navigate("/", { replace: true });
   };
 
   const handleQuizChange = (e) => {

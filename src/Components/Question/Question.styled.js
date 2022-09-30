@@ -47,9 +47,13 @@ export const StyledRibbon = styled.div`
 
 export const StyledQuestionHeader = styled.div`
   display: flex;
-  flex-direction: column;
+  /* flex-direction: column; */
+  align-items: center;
   padding: 1em;
   /* flex-wrap: wrap; */
+  & input {
+    flex-basis: 60%;
+  }
   & div {
     &:nth-of-type(1) {
       display: flex;
@@ -61,8 +65,6 @@ export const StyledQuestionHeader = styled.div`
   }
 
   @media (min-width: 600px) {
-    flex-direction: row;
-    align-items: center;
     & input {
       flex-basis: 40%;
     }
@@ -75,9 +77,9 @@ export const StyledQuestionHeader = styled.div`
         }
       }
       &:nth-of-type(2) {
-        flex-basis: 40%;
+        /* flex-basis: 40%; */
         & select {
-          width: 100%;
+          /* width: 100%; */
         }
       }
     }
