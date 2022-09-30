@@ -67,20 +67,20 @@ function Form() {
     console.log({ quesTionId, optionId });
 
     if (!selectedAnswers.length) {
-      //////
+      //////brand new
       setSelectedAnswers([{ quesTionId, answer: [optionId] }]);
     } else {
       const temp = selectedAnswers?.findIndex(
         (answer) => answer.quesTionId === quesTionId
       );
       if (temp === -1) {
-        //////
+        //////adding
         setSelectedAnswers([
           ...selectedAnswers,
           { quesTionId, answer: [optionId] },
         ]);
       } else {
-        //////
+        //////updating
         setSelectedAnswers((prev) => {
           return prev?.map((answer) => {
             if (answer.quesTionId === quesTionId) {
@@ -94,23 +94,49 @@ function Form() {
   };
 
   const multiSelectHandler = (isChecked, quesTionId, optionId) => {
-    // setAnswers((prev) => {
-    //   return prev.map((answer) => {
-    //     if (answer.quesTionId === quesTionId) {
-    //       if (isChecked) {
-    //         return { ...answer, answer: [...prev.answer, optionId] };
-    //       } else {
-    //         return {
-    //           ...answer,
-    //           answer: prev.answer.filter((id) => {
-    //             return id !== optionId;
-    //           }),
-    //         };
-    //       }
-    //     }
-    //     return answer;
-    //   });
-    // });
+    console.log({ quesTionId, optionId });
+
+    if (!selectedAnswers.length) {
+      ////// brand new
+      console.log(" ////// brand new");
+      setSelectedAnswers([{ quesTionId, answer: [optionId] }]);
+    } else {
+      const temp = selectedAnswers?.findIndex(
+        (answer) => answer.quesTionId === quesTionId
+      );
+      if (temp === -1) {
+        //////adding
+        console.log(" //////adding");
+        setSelectedAnswers([
+          ...selectedAnswers,
+          { quesTionId, answer: [optionId] },
+        ]);
+      } else {
+        //////updating
+        console.log("//////updating");
+        setSelectedAnswers((prev) => {
+          return prev?.map(({ quesTionId: qId, answer }) => {
+            if (qId === quesTionId) {
+              if (isChecked) {
+                //adding another check
+                console.log(" //adding another check");
+                return { ...answer, answer: [...answer, optionId] };
+              } else {
+                //deselecting
+                console.log("  //deselecting");
+                return {
+                  ...answer,
+                  answer: answer.filter((prevOptionId) => {
+                    return prevOptionId !== optionId;
+                  }),
+                };
+              }
+            }
+            return answer;
+          });
+        });
+      }
+    }
   };
 
   const submitHandler = (e) => {
@@ -190,7 +216,7 @@ function Form() {
                 ) : (
                   <Checkbox.Group
                     onChange={(e) => {
-                      console.log({ Group: "checkbox", e, qId });
+                      // console.log({ Group: "checkbox", e, qId });
                     }}
                   >
                     <Space direction="vertical">
@@ -202,9 +228,14 @@ function Form() {
                           return (
                             <Checkbox
                               key={id}
-                              value={optionText}
+                              value={id}
                               onChange={(e) => {
                                 console.log({ item: "checkbox", e });
+                                multiSelectHandler(
+                                  e.target.checked,
+                                  qId,
+                                  e.target.value
+                                );
                               }}
                             >
                               <div>
