@@ -97,47 +97,28 @@ function Form() {
                 )}
               </StyledViewQuestionHeader>
               <StyledViewOptionsContainer>
-                {/* {options?.map(
-                  ({ optionText, optionImageUrl, isCorrects }, index) => {
-                    return "s";
-                  }
-                )} */}
                 {questionType === "radio" ? (
-                  <Radio.Group onChange={() => {}} value={" sd"}>
+                  <Radio.Group onChange={() => {}}>
                     <Space direction="vertical">
-                      <Radio value={1}>Option A</Radio>
-                      <Radio value={2}>Option B</Radio>
-                      <Radio value={3}>Option C</Radio>
-                      <Radio value={4}>
-                        More...
-                        {4 === 4 ? (
-                          <Input
-                            style={{
-                              width: 100,
-                              marginLeft: 10,
-                            }}
-                          />
-                        ) : null}
-                      </Radio>
+                      {options?.map(
+                        ({ optionText, optionImageUrl, isCorrects }, index) => {
+                          return (
+                            <Radio value={optionText}> {optionText}</Radio>
+                          );
+                        }
+                      )}
                     </Space>
                   </Radio.Group>
                 ) : (
-                  <Checkbox.Group onChange={() => {}} value={" sd"}>
+                  <Checkbox.Group onChange={() => {}}>
                     <Space direction="vertical">
-                      <Checkbox value={1}>Option A</Checkbox>
-                      <Checkbox value={2}>Option B</Checkbox>
-                      <Checkbox value={3}>Option C</Checkbox>
-                      <Checkbox value={4}>
-                        More...
-                        {4 === 4 ? (
-                          <Input
-                            style={{
-                              width: 100,
-                              marginLeft: 10,
-                            }}
-                          />
-                        ) : null}
-                      </Checkbox>
+                      {options?.map(
+                        ({ optionText, optionImageUrl, isCorrects }, index) => {
+                          return (
+                            <Checkbox value={optionText}>{optionText}</Checkbox>
+                          );
+                        }
+                      )}
                     </Space>
                   </Checkbox.Group>
                 )}

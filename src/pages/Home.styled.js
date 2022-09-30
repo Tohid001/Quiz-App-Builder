@@ -29,12 +29,16 @@ export const StyledQuizCard = styled.div`
     &:nth-of-type(2) {
     }
     &:nth-of-type(3) {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      justify-content: space-between;
+      padding: 1rem;
+      position: absolute;
+      top: 0.25em;
+      right: 0.25em;
       & span {
         font-size: 24px;
-        position: absolute;
-        top: 0.25em;
-        right: 0.25em;
-        /* padding: 1em; */
         & a {
           all: unset;
           cursor: pointer;

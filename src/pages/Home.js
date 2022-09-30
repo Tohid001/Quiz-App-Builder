@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Header from "../Components/Header/Header";
-import { Card } from "antd";
-import { EyeOutlined } from "@ant-design/icons";
+import {} from "antd";
+import { EyeOutlined, EditOutlined } from "@ant-design/icons";
 import getCachedState from "../utils/getCachedState";
 import { NavLink } from "react-router-dom";
 import { StyledGrid, StyledQuizCard } from "./Home.styled";
@@ -26,6 +26,11 @@ function Home() {
               <span>
                 <NavLink to={`view/${quiz.id}`}>
                   <EyeOutlined />
+                </NavLink>
+              </span>
+              <span>
+                <NavLink to={`form/${quiz.id}`}>
+                  <EditOutlined />
                 </NavLink>
               </span>
             </div>
