@@ -6,6 +6,8 @@ import useDidMountEffect from "../../Hooks/úseDIdMount";
 import { Button } from "antd";
 import { newOption } from "../../constants";
 
+import { v4 as uuidv4 } from "uuid";
+
 function Options({ options, questionId, questionType }) {
   const { updateQuestionHandler } = useContext(qizContext);
   const [currentOptions, setCurrentOptions] = useState(options);
@@ -25,12 +27,14 @@ function Options({ options, questionId, questionType }) {
     });
   };
 
-  const deleteOptionHandler = (optionIndex) => {
-    setCurrentOptions(
-      currentOptions.filter((option, index) => {
-        return !(index === optionIndex);
-      })
-    );
+  const deleteOptionHandler = (optionId) => {
+    setCurrentOptions((prev) => {
+      return [
+        ...prev.filter((option, index) => {
+          return option.id !== optionId;
+        }),
+      ];
+    });
   };
 
   return (
@@ -38,7 +42,7 @@ function Options({ options, questionId, questionType }) {
       <h4>options:</h4>
       {options.map((option, index) => (
         <OptionComponent
-          key={index}
+          key={option.id}
           option={option}
           index={index}
           questionId={questionId}
@@ -55,7 +59,9 @@ function Options({ options, questionId, questionType }) {
           size="large"
           type="primary"
           onClick={() => {
-            setCurrentOptions([...currentOptions, newOption]);
+            setCurrentOptions((prev) => {
+              return [...prev, { ...newOption, id: uuidv4() }];
+            });
           }}
         >
           Add option

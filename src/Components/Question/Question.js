@@ -105,7 +105,7 @@ function Question(props) {
             display: `${expandedQuestion === id.toString() ? "block" : "none"}`,
           }}
           onClick={() => {
-            addQuestionHandler(index);
+            addQuestionHandler(id);
           }}
         >
           <PlusOutlined />

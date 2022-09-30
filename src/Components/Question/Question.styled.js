@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const StyledQuesTionContainer = styled.div`
-  /* padding: 1em; */
+  padding: 1em;
   background-color: white;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;

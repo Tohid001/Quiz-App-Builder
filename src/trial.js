@@ -1,39 +1,5 @@
-const quizSchema = {
-  id: "1",
-  quiz_title: "lorem",
-  questions: [
-    {
-      id: "1",
-      body: {
-        text: "lorem",
-        imageUrl: "jjsjsjs",
-      },
-      options: [
-        {
-          id: "1",
-          body: { text: "lorem", imageUrl: "jjsjsjs" },
-          type: "single/multiple",
-          correct: true,
-        },
-      ],
-      answers: [],
-    },
-  ],
-};
+// import { v4 as uuidv4 } from "uuid";
 
-// const questionSchema = {
-//   id: "1",
-//   body: {
-//     text: "lorem",
-//     imageUrl: "jjsjsjs",
-//   },
-//   options: [],
-//   answers: [],
-// };
+const { v4 } = require("uuid");
 
-// const optionSchema = {
-//   id: "1",
-//   body: { text: "lorem", imageUrl: "jjsjsjs" },
-//   type: "single/multiple",
-//   correct: true,
-// };
+console.log(v4(), v4());

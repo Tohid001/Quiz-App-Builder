@@ -13,11 +13,14 @@ export const StyledForm = styled.form`
   gap: 10px;
 `;
 
-export const StyledQuestionSection = styled.section`
+export const commonHeaderSection = styled.header`
   width: 90%;
   background-color: white;
   border-radius: 10px;
   padding: 10px;
+`;
+
+export const StyledQuestionSection = styled(commonHeaderSection)`
   &:nth-of-type(1) {
     padding: 25px;
     border-top: 10px solid rgb(66, 47, 245);
@@ -40,7 +43,6 @@ export const StyledQuestionSection = styled.section`
     display: flex;
     flex-direction: column;
     gap: 3em;
-
     background-color: transparent;
     padding: 0;
   }

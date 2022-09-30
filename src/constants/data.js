@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from "uuid";
+
 export const ItemTypes = {
   QUESTION: "question",
 };
@@ -7,8 +9,8 @@ export const newQuestion = {
   questionType: "radio",
   questionimageUrl: "",
   options: [
-    { optionText: "", optionImageUrl: "", isCorrect: false },
-    { optionText: "", optionImageUrl: "", isCorrect: false },
+    { optionText: "", optionImageUrl: "", isCorrect: false, id: uuidv4() },
+    { optionText: "", optionImageUrl: "", isCorrect: false, id: uuidv4() },
   ],
   open: true,
   points: 0,
@@ -31,8 +33,8 @@ export const initialQuizState = {
       questionimageUrl: "",
       questionType: "radio",
       options: [
-        { optionText: "", optionImageUrl: "", isCorrect: false },
-        { optionText: "", optionImageUrl: "", isCorrect: false },
+        { optionText: "", optionImageUrl: "", isCorrect: false, id: uuidv4() },
+        { optionText: "", optionImageUrl: "", isCorrect: false, id: uuidv4() },
       ],
       open: true,
       points: 0,
