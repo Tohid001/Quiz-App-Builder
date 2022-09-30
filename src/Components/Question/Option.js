@@ -101,7 +101,7 @@ function OptionComponent({
             <PictureOutlined />
           </span>
         </div>
-        <button
+        <span
           onClick={() => {
             deleteOptionHandler(option.id);
           }}
@@ -116,7 +116,7 @@ function OptionComponent({
           }}
         >
           <CloseCircleOutlined />
-        </button>
+        </span>
       </StyledQuestionHeader>
       {optionImageUrl && (
         <ImageComponent

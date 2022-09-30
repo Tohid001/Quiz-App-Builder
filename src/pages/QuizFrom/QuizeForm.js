@@ -94,46 +94,6 @@ function QuizeForm() {
     }));
   }, []);
 
-  const submitHandler = (e) => {
-    console.log("submit", "outside");
-    e.preventDefault();
-    const quizes = getCachedState("quizes");
-    if (quizes) {
-      console.log("submit");
-      const existingFormIndex = quizes?.findIndex((quiz, index) => {
-        return quiz.id === formId;
-      });
-      if (existingFormIndex !== -1) {
-        console.log("submit");
-        localStorage.setItem(
-          "quizes",
-          JSON.stringify(
-            quizes.map((quiz, index) => {
-              if (quiz.id === formId) {
-                return { ...quizeFormStates };
-              }
-            })
-          )
-        );
-      } else {
-        console.log("submit");
-        localStorage.setItem(
-          "quizes",
-          JSON.stringify([...quizes, { ...quizeFormStates, id: formId }])
-        );
-      }
-    } else {
-      console.log("submit");
-      localStorage.setItem(
-        "quizes",
-        JSON.stringify([{ ...quizeFormStates, id: formId }])
-      );
-    }
-    localStorage.removeItem(formId);
-    navigate("/", { replace: true });
-    console.log("submit");
-  };
-
   const handleQuizChange = (e) => {
     setQuizeFormStates({ ...quizeFormStates, [e.target.name]: e.target.value });
   };
@@ -176,7 +136,7 @@ function QuizeForm() {
         return {
           ...prev,
           quizQuestions: prev.quizQuestions.map((question) => {
-            if (question.id.toString() === questionId.toString()) {
+            if (question.id === questionId) {
               return { ...question, ...payload };
             }
             return question;
@@ -187,77 +147,113 @@ function QuizeForm() {
       console.log({ ...error });
     }
   };
+  const submitHandler = (e) => {
+    console.log("submit", "outside");
+    e.preventDefault();
+    const quizes = getCachedState("quizes");
+    if (quizes) {
+      console.log("submit and quizes exist");
+      const existingFormIndex = quizes?.findIndex((quiz, index) => {
+        return quiz.id === formId;
+      });
+      if (existingFormIndex !== -1) {
+        console.log("submit and existing form");
+        localStorage.setItem(
+          "quizes",
+          JSON.stringify(
+            quizes.map((quiz, index) => {
+              if (quiz.id === formId) {
+                return { ...quizeFormStates };
+              }
+            })
+          )
+        );
+      } else {
+        console.log("submit and new ");
+        localStorage.setItem(
+          "quizes",
+          JSON.stringify([...quizes, { ...quizeFormStates, id: formId }])
+        );
+      }
+    } else {
+      console.log("submit and brand new");
+      localStorage.setItem(
+        "quizes",
+        JSON.stringify([{ ...quizeFormStates, id: formId }])
+      );
+    }
+    localStorage.removeItem(formId);
+    navigate("/", { replace: true });
+    console.log("submit final");
+  };
 
-  try {
-    return (
-      <qizContext.Provider
-        value={{
-          quizeFormStates,
-          addQuestionHandler,
-          deleteQuestionHandler,
-          sortQuestionHandler,
-          updateQuestionHandler,
-          defaultActiveKey,
-          expandedQuestion,
+  return (
+    <qizContext.Provider
+      value={{
+        quizeFormStates,
+        addQuestionHandler,
+        deleteQuestionHandler,
+        sortQuestionHandler,
+        updateQuestionHandler,
+        defaultActiveKey,
+        expandedQuestion,
+      }}
+    >
+      <StyledForm
+        onSubmit={(e) => {
+          submitHandler(e);
         }}
       >
-        <StyledForm
-          onSubmit={(e) => {
-            e.preventDefault();
-            console.log("submit");
+        <StyledQuestionSection>
+          <Input
+            type="text"
+            placeholder="Untitled Quiz"
+            value={quizeText}
+            onChange={handleQuizChange}
+            name="quizeText"
+          />
+          <Input.TextArea
+            placeholder="Quiz Description"
+            value={quizeDescription}
+            rows={4}
+            autoSize={{ minRows: 2, maxRows: 6 }}
+            onChange={handleQuizChange}
+            name="quizeDescription"
+          />
+        </StyledQuestionSection>
+
+        <DndProvider backend={HTML5Backend}>
+          <StyledQuestionSection>
+            <Collapse
+              style={{ background: "transparent" }}
+              bordered={false}
+              accordion
+              onChange={(key) => {
+                console.log({ key });
+                setExpandedQuestion(key);
+              }}
+              defaultActiveKey={defaultActiveKey}
+              // activeKey={defaultActiveKey}
+            >
+              {quizeFormStates?.quizQuestions?.map((question, index) => (
+                <Question key={question.id} question={question} index={index} />
+              ))}
+            </Collapse>
+          </StyledQuestionSection>
+        </DndProvider>
+        <Button
+          size="large"
+          type="primary"
+          htmlType="submit"
+          onClick={() => {
+            console.log("button clicked");
           }}
         >
-          <StyledQuestionSection>
-            <Input
-              type="text"
-              placeholder="Untitled Quiz"
-              value={quizeText}
-              onChange={handleQuizChange}
-              name="quizeText"
-            />
-            <Input.TextArea
-              placeholder="Quiz Description"
-              value={quizeDescription}
-              rows={4}
-              autoSize={{ minRows: 2, maxRows: 6 }}
-              onChange={handleQuizChange}
-              name="quizeDescription"
-            />
-          </StyledQuestionSection>
-
-          <DndProvider backend={HTML5Backend}>
-            <StyledQuestionSection>
-              <Collapse
-                style={{ background: "transparent" }}
-                bordered={false}
-                accordion
-                onChange={(key) => {
-                  console.log({ key });
-                  setExpandedQuestion(key);
-                }}
-                defaultActiveKey={defaultActiveKey}
-                // activeKey={defaultActiveKey}
-              >
-                {quizeFormStates?.quizQuestions?.map((question, index) => (
-                  <Question
-                    key={question.id}
-                    question={question}
-                    index={index}
-                  />
-                ))}
-              </Collapse>
-            </StyledQuestionSection>
-          </DndProvider>
-          {/* <Button size="large" type="primary" htmlType="submit">
-        Save Changes
-      </Button> */}
-        </StyledForm>
-      </qizContext.Provider>
-    );
-  } catch (error) {
-    return <h1>error</h1>;
-    console.log({ ...error });
-  }
+          Save Changes
+        </Button>
+      </StyledForm>
+    </qizContext.Provider>
+  );
 }
 
 export default QuizeForm;
