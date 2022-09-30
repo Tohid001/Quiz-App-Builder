@@ -30,19 +30,22 @@ function Form() {
   const { quizId } = useParams();
   const navigate = useNavigate();
 
-  const [answers, setAnswers] = useState(
-    getCachedState(`view-${quizId}`) || []
+  const [selectedAnswers, setSelectedAnswers] = useState(
+    getCachedState(`selectedAanswers-${quizId}`) || []
   );
 
   const [quizeState, setQuizeState] = useState({});
 
   const { quizeText, quizeDescription, quizQuestions } = quizeState;
 
-  console.log({ answers, quizeState });
+  console.log({ selectedAnswers, quizeState });
 
-  useEffect(() => {
-    localStorage.setItem(`view-${quizId}`, JSON.stringify(answers));
-  }, [answers]);
+  // useEffect(() => {
+  //   localStorage.setItem(
+  //     `selectedAanswers-${quizId}`,
+  //     JSON.stringify(selectedAnswers)
+  //   );
+  // }, [selectedAnswers]);
 
   useEffect(() => {
     const localQuizList = getCachedState("quizes");
@@ -59,6 +62,56 @@ function Form() {
     } else {
     }
   }, []);
+
+  const singleSelectHandler = (quesTionId, optionId) => {
+    console.log({ quesTionId, optionId });
+
+    if (!selectedAnswers.length) {
+      //////
+      setSelectedAnswers([{ quesTionId, answer: [optionId] }]);
+    } else {
+      const temp = selectedAnswers?.findIndex(
+        (answer) => answer.quesTionId === quesTionId
+      );
+      if (temp === -1) {
+        //////
+        setSelectedAnswers([
+          ...selectedAnswers,
+          { quesTionId, answer: [optionId] },
+        ]);
+      } else {
+        //////
+        setSelectedAnswers((prev) => {
+          return prev?.map((answer) => {
+            if (answer.quesTionId === quesTionId) {
+              return { ...answer, answer: [optionId] };
+            }
+            return answer;
+          });
+        });
+      }
+    }
+  };
+
+  const multiSelectHandler = (isChecked, quesTionId, optionId) => {
+    // setAnswers((prev) => {
+    //   return prev.map((answer) => {
+    //     if (answer.quesTionId === quesTionId) {
+    //       if (isChecked) {
+    //         return { ...answer, answer: [...prev.answer, optionId] };
+    //       } else {
+    //         return {
+    //           ...answer,
+    //           answer: prev.answer.filter((id) => {
+    //             return id !== optionId;
+    //           }),
+    //         };
+    //       }
+    //     }
+    //     return answer;
+    //   });
+    // });
+  };
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -100,7 +153,8 @@ function Form() {
                 {questionType === "radio" ? (
                   <Radio.Group
                     onChange={(e) => {
-                      console.log({ Group: "radio", e });
+                      // console.log({ Group: "radio", e, qId });
+                      singleSelectHandler(qId, e.target.value);
                     }}
                   >
                     <Space direction="vertical">
@@ -112,9 +166,9 @@ function Form() {
                           return (
                             <Radio
                               key={id}
-                              value={optionText}
+                              value={id}
                               onChange={(e) => {
-                                console.log({ item: "radio", e });
+                                // console.log({ item: "radio", e });
                               }}
                             >
                               <div>
@@ -136,7 +190,7 @@ function Form() {
                 ) : (
                   <Checkbox.Group
                     onChange={(e) => {
-                      console.log({ Group: "checkbox", e });
+                      console.log({ Group: "checkbox", e, qId });
                     }}
                   >
                     <Space direction="vertical">

@@ -32,6 +32,7 @@ function QuestionHeader({ question, serial }) {
   const [showModal, setShowMoDal] = useState(false);
 
   const handleQuestionHeaderChange = (e) => {
+    console.log({ [e.target.name]: e.target.value });
     setQuestionHeaderStates((prev) => {
       return { ...prev, [e.target.name]: e.target.value };
     });
