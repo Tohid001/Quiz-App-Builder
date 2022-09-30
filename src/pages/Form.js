@@ -77,7 +77,7 @@ function Form() {
         {quizQuestions?.map(
           (
             {
-              id,
+              id: qId,
               questiontext,
               questionimageUrl,
               questionType,
@@ -86,7 +86,7 @@ function Form() {
             },
             index
           ) => (
-            <StyledViewQuesTionItem>
+            <StyledViewQuesTionItem key={qId}>
               <StyledViewQuestionHeader>
                 <div>
                   <h2>{questiontext}</h2>
@@ -98,24 +98,72 @@ function Form() {
               </StyledViewQuestionHeader>
               <StyledViewOptionsContainer>
                 {questionType === "radio" ? (
-                  <Radio.Group onChange={() => {}}>
+                  <Radio.Group
+                    onChange={(e) => {
+                      console.log({ Group: "radio", e });
+                    }}
+                  >
                     <Space direction="vertical">
                       {options?.map(
-                        ({ optionText, optionImageUrl, isCorrects }, index) => {
+                        (
+                          { optionText, optionImageUrl, isCorrect, id },
+                          index
+                        ) => {
                           return (
-                            <Radio value={optionText}> {optionText}</Radio>
+                            <Radio
+                              key={id}
+                              value={optionText}
+                              onChange={(e) => {
+                                console.log({ item: "radio", e });
+                              }}
+                            >
+                              <div>
+                                <p>{optionText}</p>
+                                {optionImageUrl && (
+                                  <Image
+                                    width={200}
+                                    src={optionImageUrl}
+                                    preview={false}
+                                  />
+                                )}
+                              </div>
+                            </Radio>
                           );
                         }
                       )}
                     </Space>
                   </Radio.Group>
                 ) : (
-                  <Checkbox.Group onChange={() => {}}>
+                  <Checkbox.Group
+                    onChange={(e) => {
+                      console.log({ Group: "checkbox", e });
+                    }}
+                  >
                     <Space direction="vertical">
                       {options?.map(
-                        ({ optionText, optionImageUrl, isCorrects }, index) => {
+                        (
+                          { optionText, optionImageUrl, isCorrect, id },
+                          index
+                        ) => {
                           return (
-                            <Checkbox value={optionText}>{optionText}</Checkbox>
+                            <Checkbox
+                              key={id}
+                              value={optionText}
+                              onChange={(e) => {
+                                console.log({ item: "checkbox", e });
+                              }}
+                            >
+                              <div>
+                                <p>{optionText}</p>
+                                {optionImageUrl && (
+                                  <Image
+                                    width={200}
+                                    src={optionImageUrl}
+                                    preview={false}
+                                  />
+                                )}
+                              </div>
+                            </Checkbox>
                           );
                         }
                       )}

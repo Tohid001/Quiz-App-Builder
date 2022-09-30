@@ -113,7 +113,7 @@ function Question(props) {
       </Tooltip>
 
       <Panel
-        {...antdProps}
+        {...props}
         // showArrow={false}
         header={<QuestionHeader serial={index + 1} question={props.question} />}
       >

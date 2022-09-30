@@ -7,8 +7,12 @@ import { NavLink } from "react-router-dom";
 import { StyledGrid, StyledQuizCard } from "./Home.styled";
 
 function Home() {
-  const [quizes] = useState(getCachedState("quizes") || []);
+  const [quizes, setQuizes] = useState([]);
   console.log({ quizes });
+
+  useEffect(() => {
+    getCachedState("quizes") && setQuizes(getCachedState("quizes"));
+  }, []);
   return (
     <div>
       <Header />

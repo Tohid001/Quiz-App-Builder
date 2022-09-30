@@ -165,6 +165,7 @@ function QuizeForm() {
               if (quiz.id === formId) {
                 return { ...quizeFormStates };
               }
+              return quiz;
             })
           )
         );
