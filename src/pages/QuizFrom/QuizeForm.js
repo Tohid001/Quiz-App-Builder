@@ -61,6 +61,7 @@ function QuizeForm() {
       const localQuizList = getCachedState("quizes");
 
       if (localQuizList && !getCachedState(formId)) {
+        console.log("hello");
         const quizLocalIndex = localQuizList.findIndex((quiz, index) => {
           return quiz.id === formId;
         });
@@ -199,7 +200,7 @@ function QuizeForm() {
       if (quizLocalIndex !== -1) {
         setQuizeFormStates(localQuizList[quizLocalIndex]);
       } else {
-        localStorage.setItem(formId, JSON.stringify(initialQuizState));
+        setQuizeFormStates(initialQuizState);
       }
     } else {
       // localStorage.setItem(formId, JSON.stringify(quizeFormStates));
@@ -260,7 +261,6 @@ function QuizeForm() {
             </Collapse>
           </StyledQuestionSection>
         </DndProvider>
-
         {/* <Button
           size="large"
           type="primary"
