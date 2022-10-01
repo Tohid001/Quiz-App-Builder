@@ -60,7 +60,7 @@ function QuizeForm() {
     try {
       const localQuizList = getCachedState("quizes");
 
-      if (localQuizList) {
+      if (localQuizList && !getCachedState(formId)) {
         const quizLocalIndex = localQuizList.findIndex((quiz, index) => {
           return quiz.id === formId;
         });
@@ -188,6 +188,24 @@ function QuizeForm() {
     console.log("submit final");
   };
 
+  const resetHandler = () => {
+    const localQuizList = getCachedState("quizes");
+
+    if (localQuizList) {
+      const quizLocalIndex = localQuizList.findIndex((quiz, index) => {
+        return quiz.id === formId;
+      });
+
+      if (quizLocalIndex !== -1) {
+        setQuizeFormStates(localQuizList[quizLocalIndex]);
+      } else {
+        localStorage.setItem(formId, JSON.stringify(initialQuizState));
+      }
+    } else {
+      // localStorage.setItem(formId, JSON.stringify(quizeFormStates));
+    }
+  };
+
   return (
     <qizContext.Provider
       value={{
@@ -242,6 +260,18 @@ function QuizeForm() {
             </Collapse>
           </StyledQuestionSection>
         </DndProvider>
+
+        {/* <Button
+          size="large"
+          type="primary"
+          onClick={() => {
+            // console.log("button clicked");
+            resetHandler();
+          }}
+        >
+          Discard Changes
+        </Button> */}
+
         <Button
           size="large"
           type="primary"

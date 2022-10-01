@@ -9,7 +9,7 @@ import Options from "./Options";
 //import ui's
 import { StyledQuesTionContainer, StyledRibbon } from "./Question.styled";
 import { Button, Input, Space, Collapse, Tooltip, Image } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
 
 //importing dnd utilities
 import { ItemTypes } from "../../constants";
@@ -19,6 +19,14 @@ import { useDrag, useDrop } from "react-dnd";
 const { QUESTION } = ItemTypes;
 const { Panel } = Collapse;
 
+const styles = {
+  position: "absolute",
+  borderRadius: "50%",
+  aspectRatio: "1/1",
+  padding: "0px",
+  left: -50,
+};
+
 //********COMPONENT DEFINITION*******
 function Question(props) {
   const {
@@ -26,6 +34,7 @@ function Question(props) {
     expandedQuestion,
     addQuestionHandler,
     updateQuestionHandler,
+    deleteQuestionHandler,
   } = useContext(qizContext);
   const { id, questiontext, options, questionType, questionimageUrl, points } =
     props.question;
@@ -97,10 +106,7 @@ function Question(props) {
         <Button
           type="primary"
           style={{
-            position: "absolute",
-            borderRadius: "50%",
-            aspectRatio: "1/1",
-            padding: "0px",
+            ...styles,
             left: -50,
             display: `${expandedQuestion === id ? "block" : "none"}`,
           }}
@@ -109,6 +115,21 @@ function Question(props) {
           }}
         >
           <PlusOutlined />
+        </Button>
+      </Tooltip>
+      <Tooltip placement="top" title="Delete question">
+        <Button
+          type="primary"
+          style={{
+            ...styles,
+            bottom: 0,
+            display: `${expandedQuestion === id ? "block" : "none"}`,
+          }}
+          onClick={() => {
+            deleteQuestionHandler(id);
+          }}
+        >
+          <DeleteOutlined />
         </Button>
       </Tooltip>
 
@@ -120,6 +141,7 @@ function Question(props) {
         <div style={{ marginBottom: "1rem" }}>
           <label htmlFor="points">Points:</label>
           <input
+            style={{ width: "50px" }}
             id="points"
             type="number"
             min={0}

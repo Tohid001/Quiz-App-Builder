@@ -5,7 +5,7 @@ import ModalComponent from "./Modal";
 import ImageComponent from "./Image";
 import { Input } from "antd";
 import { PictureOutlined, CloseCircleOutlined } from "@ant-design/icons";
-import { StyledQuestionHeader } from "./Question.styled";
+import { StyledOption } from "./Question.styled";
 import useDidMountEffect from "../../Hooks/úseDIdMount";
 
 function OptionComponent({
@@ -66,7 +66,7 @@ function OptionComponent({
 
   return (
     <>
-      <StyledQuestionHeader>
+      <StyledOption>
         <ModalComponent
           showModal={showModal}
           okHandler={okHandler}
@@ -100,24 +100,21 @@ function OptionComponent({
           >
             <PictureOutlined />
           </span>
+          <span
+            onClick={() => {
+              deleteOptionHandler(option.id);
+            }}
+            disabled={disableDeleteButton}
+            style={{
+              border: "none",
+              outline: "none",
+              background: `${disableDeleteButton ? "gray" : "transparent"}`,
+            }}
+          >
+            <CloseCircleOutlined />
+          </span>
         </div>
-        <span
-          onClick={() => {
-            deleteOptionHandler(option.id);
-          }}
-          disabled={disableDeleteButton}
-          style={{
-            fontSize: "24px",
-            padding: "5px",
-            cursor: "pointer",
-            border: "none",
-            outline: "none",
-            background: `${disableDeleteButton ? "gray" : "transparent"}`,
-          }}
-        >
-          <CloseCircleOutlined />
-        </span>
-      </StyledQuestionHeader>
+      </StyledOption>
       {optionImageUrl && (
         <ImageComponent
           src={optionImageUrl}

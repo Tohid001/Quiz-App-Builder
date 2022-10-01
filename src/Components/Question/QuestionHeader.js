@@ -56,14 +56,6 @@ function QuestionHeader({ question, serial }) {
     alert("deleted the imageURL");
   };
 
-  // useEffect(() => {
-  //   updateQuestionHandler(id, questionHeaderStates);
-  // }, [questionHeaderStates]);
-
-  // useEffect(() => {
-  //   setQuestionHeaderStates({ questiontext, questionimageUrl, questionType });
-  // }, [questiontext, questionimageUrl, questionType]);
-
   useDidMountEffect(() => {
     updateQuestionHandler(id, questionHeaderStates);
   }, [questionHeaderStates]);

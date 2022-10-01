@@ -25,14 +25,6 @@ export const StyledQuesTionContainer = styled.div`
     border-top-right-radius: 10px;
     z-index: -1;
   }
-
-  //found a way around to fix the layout of panel header-antd@4.23.2
-  & .ant-collapse-header {
-    /* display: flex; */
-    /* gap: 10px; */
-    /* cursor: pointer; */
-    /* height: 50px; */
-  }
 `;
 
 export const StyledRibbon = styled.div`
@@ -88,13 +80,15 @@ export const StyledQuestionHeader = styled.div`
 
 export const StyledImageContainer = styled.div`
   padding: 30px;
+  padding-top: 0;
+  padding-left: 0;
   position: relative;
   width: fit-content;
   & image {
     display: block;
     object-position: center;
     object-fit: cover;
-    width: 200px;
+    width: 100px;
     aspect-ratio: 1/1;
     z-index: -1;
   }
@@ -103,12 +97,41 @@ export const StyledImageContainer = styled.div`
     position: absolute;
     top: 0;
     right: 0;
-    /* padding: 0.5em; */
-    /* width: 30px; */
+    transform: translateX(100%);
     aspect-ratio: 1/1;
     z-index: 2;
     font-size: 24px;
     color: black;
-    /* background-color: rgba(199, 197, 193); */
+  }
+`;
+
+export const StyledOption = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1em;
+  @media (min-width: 500px) {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  & input {
+    @media (min-width: 500px) {
+      flex-basis: 50%;
+    }
+  }
+  & div {
+    display: flex;
+    padding: 1em;
+    justify-content: space-around;
+    align-items: center;
+    @media (min-width: 500px) {
+      padding: 0;
+      flex-basis: 20%;
+    }
+    & span {
+      font-size: 20px;
+      padding: 2.5px;
+      cursor: pointer;
+    }
   }
 `;
