@@ -2,14 +2,14 @@ import React, { useState, useEffect, useCallback, createContext } from "react";
 
 //import utility
 import update from "immutability-helper";
-import { useParams } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 //importing my components
 import {} from "../Components";
 
 ///importing ui's
-import { Button, Image, Radio, Checkbox, Space, Input } from "antd";
+import { Button, Image, Radio, Checkbox, Space, Input, Modal } from "antd";
 import {
   StyleViewdForm,
   StyledHeaderSection,
@@ -30,15 +30,26 @@ function Form() {
   const { quizId } = useParams();
   const navigate = useNavigate();
 
+  const [quizeState, setQuizeState] = useState({});
   const [selectedAnswers, setSelectedAnswers] = useState(
     getCachedState(`selectedAanswers-${quizId}`) || []
   );
-
-  const [quizeState, setQuizeState] = useState({});
+  const [showModal, setShowMoDal] = useState(false);
+  const [finalScores, setFinalScores] = useState(0);
+  const [totalPoints, setTotalPoints] = useState(0);
 
   const { quizeText, quizeDescription, quizQuestions } = quizeState;
 
-  console.log({ selectedAnswers, quizeState });
+  const questionsWithAns = quizQuestions?.filter((question) => {
+    return question.options.some((option) => option.isCorrect);
+  });
+
+  console.log({ selectedAnswers, quizeState, questionsWithAns });
+
+  useDidMountEffect(() => {
+    console.log("first");
+    setShowMoDal(true);
+  }, [finalScores]);
 
   useEffect(() => {
     localStorage.setItem(
@@ -62,6 +73,12 @@ function Form() {
     } else {
     }
   }, []);
+  useEffect(() => {
+    const totalPoints = questionsWithAns?.reduce((sum, question) => {
+      return sum + question.points;
+    }, 0);
+    setTotalPoints(totalPoints);
+  }, [quizeState]);
 
   const singleSelectHandler = (quesTionId, optionId) => {
     console.log({ quesTionId, optionId });
@@ -167,21 +184,67 @@ function Form() {
     }
   };
 
+  const scoreHandler = () => {
+    const correctAnswers = questionsWithAns
+      ?.map((question) => {
+        const correctOptions = question.options.filter(
+          (option) => option.isCorrect
+        );
+
+        return {
+          quesTionId: question.id,
+          answer: correctOptions.map((option) => option.id),
+        };
+      })
+      .filter((object) => {
+        return object.answer.length;
+      });
+
+    console.log({ correctAnswers });
+
+    // const finalScore = questionsWithAns?.reduce(
+    //   (finalScore, question) => {},
+    //   0
+    // );
+  };
+
   const submitHandler = (e) => {
     e.preventDefault();
-
+    scoreHandler();
     localStorage.removeItem(`view-${quizId}`);
-    // navigate("/", { replace: true });
   };
 
   return (
     <StyleViewdForm onSubmit={submitHandler}>
+      <Modal
+        centered={true}
+        maskClosable={false}
+        maskStyle={{ background: "rgba(195, 198, 212,.8)" }}
+        title={<h2>Quiz result</h2>}
+        open={showModal}
+        footer={
+          <div>
+            <Button
+              type="primary"
+              onClick={() => {
+                setShowMoDal(false);
+                navigate("/", { replace: true });
+              }}
+            >
+              Go to home page
+            </Button>
+          </div>
+        }
+        closable={false}
+      >
+        <h2>{`You have scored ${finalScores} points out of ${totalPoints}`}</h2>
+      </Modal>
       <StyledHeaderSection>
         <h1>{quizeText}</h1>
         <p>{quizeDescription}</p>
       </StyledHeaderSection>
       <StyledViewQuesTionContainer>
-        {quizQuestions?.map(
+        {questionsWithAns?.map(
           (
             {
               id: qId,
