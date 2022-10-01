@@ -46,10 +46,10 @@ function Form() {
 
   console.log({ selectedAnswers, quizeState, questionsWithAns });
 
-  useDidMountEffect(() => {
-    console.log("first");
-    setShowMoDal(true);
-  }, [finalScores]);
+  // useDidMountEffect(() => {
+  //   console.log("first");
+  //   setShowMoDal(true);
+  // }, [finalScores]);
 
   useEffect(() => {
     localStorage.setItem(
@@ -73,6 +73,7 @@ function Form() {
     } else {
     }
   }, []);
+
   useEffect(() => {
     const totalPoints = questionsWithAns?.reduce((sum, question) => {
       return sum + question.points;
@@ -80,13 +81,15 @@ function Form() {
     setTotalPoints(totalPoints);
   }, [quizeState]);
 
-  const singleSelectHandler = (quesTionId, optionId) => {
+  const singleSelectHandler = (quesTionId, optionId, questionType) => {
     console.log({ quesTionId, optionId });
 
     if (!selectedAnswers.length) {
       //////brand new
       console.log(" ////// brand new radio");
-      setSelectedAnswers([{ quesTionId, answer: [optionId] }]);
+      setSelectedAnswers([
+        { quesTionId, answer: [optionId], type: questionType },
+      ]);
     } else {
       const temp = selectedAnswers?.findIndex(
         (answer) => answer.quesTionId === quesTionId
@@ -96,7 +99,7 @@ function Form() {
         console.log(" //////adding radio");
         setSelectedAnswers([
           ...selectedAnswers,
-          { quesTionId, answer: [optionId] },
+          { quesTionId, answer: [optionId], type: questionType },
         ]);
       } else {
         //////updating
@@ -104,7 +107,7 @@ function Form() {
         setSelectedAnswers((prev) => {
           return prev?.map((answer) => {
             if (answer.quesTionId === quesTionId) {
-              return { ...answer, answer: [optionId] };
+              return { ...answer, answer: [optionId], type: questionType };
             }
             return answer;
           });
@@ -113,13 +116,20 @@ function Form() {
     }
   };
 
-  const multiSelectHandler = (isChecked, quesTionId, optionId) => {
+  const multiSelectHandler = (
+    isChecked,
+    quesTionId,
+    optionId,
+    questionType
+  ) => {
     console.log({ quesTionId, optionId });
 
     if (!selectedAnswers.length) {
       ////// brand new
       console.log(" ////// brand new check");
-      setSelectedAnswers([{ quesTionId, answer: [optionId] }]);
+      setSelectedAnswers([
+        { quesTionId, answer: [optionId], type: questionType },
+      ]);
     } else {
       const temp = selectedAnswers?.findIndex(
         (answer) => answer.quesTionId === quesTionId
@@ -129,7 +139,7 @@ function Form() {
         console.log(" //////adding check");
         setSelectedAnswers([
           ...selectedAnswers,
-          { quesTionId, answer: [optionId] },
+          { quesTionId, answer: [optionId], type: questionType },
         ]);
       } else {
         //////updating
@@ -141,7 +151,11 @@ function Form() {
               if (isChecked) {
                 //adding another check
                 console.log(" //adding another check");
-                return { ...object, answer: [...object.answer, optionId] };
+                return {
+                  ...object,
+                  answer: [...object.answer, optionId],
+                  type: questionType,
+                };
               } else {
                 //deselecting
                 console.log("  //deselecting check");
@@ -150,6 +164,7 @@ function Form() {
                   answer: object.answer.filter((prevOptionId) => {
                     return prevOptionId !== optionId;
                   }),
+                  type: questionType,
                 };
               }
             }
@@ -185,33 +200,62 @@ function Form() {
   };
 
   const scoreHandler = () => {
-    const correctAnswers = questionsWithAns
-      ?.map((question) => {
-        const correctOptions = question.options.filter(
-          (option) => option.isCorrect
+    const correctAnswersKey = questionsWithAns?.map((question) => {
+      const correctOptions = question.options.filter(
+        (option) => option.isCorrect
+      );
+
+      return {
+        quesTionId: question.id,
+        answer: correctOptions.map((option) => option.id),
+        points: question.points,
+        type: question.questionType,
+      };
+    });
+
+    // console.log({ correctAnswersKey });
+
+    const finalScore = correctAnswersKey.reduce((finalScore, correctAns) => {
+      if (!selectedAnswers.length) {
+        return finalScore;
+      } else {
+        const temp = selectedAnswers?.findIndex(
+          (answer) => answer.quesTionId === correctAns.quesTionId
         );
+        if (temp === -1) {
+          return finalScore;
+        } else {
+          if (
+            correctAns.type === "radio" &&
+            selectedAnswers[temp].type === "radio"
+          ) {
+            const isCorrect = selectedAnswers[temp].answer.some((ans) =>
+              correctAns.answer.includes(ans)
+            );
+            return isCorrect ? finalScore + correctAns.points : finalScore;
+          }
+          if (
+            correctAns.type === "checkbox" &&
+            selectedAnswers[temp].type === "checkbox"
+          ) {
+            const isCorrect = selectedAnswers[temp].answer.every((ans) =>
+              correctAns.answer.includes(ans)
+            );
+            console.log("check", { isCorrect });
+            return isCorrect ? finalScore + correctAns.points : finalScore;
+          }
+        }
+      }
+      return finalScore;
+    }, 0);
 
-        return {
-          quesTionId: question.id,
-          answer: correctOptions.map((option) => option.id),
-        };
-      })
-      .filter((object) => {
-        return object.answer.length;
-      });
-
-    console.log({ correctAnswers });
-
-    // const finalScore = questionsWithAns?.reduce(
-    //   (finalScore, question) => {},
-    //   0
-    // );
+    setFinalScores(finalScore);
+    setShowMoDal(true);
   };
 
   const submitHandler = (e) => {
     e.preventDefault();
     scoreHandler();
-    localStorage.removeItem(`view-${quizId}`);
   };
 
   return (
@@ -228,6 +272,15 @@ function Form() {
               type="primary"
               onClick={() => {
                 setShowMoDal(false);
+              }}
+            >
+              Take quiz again
+            </Button>
+            <Button
+              type="primary"
+              onClick={() => {
+                setShowMoDal(false);
+                localStorage.removeItem(`selectedAanswers-${quizId}`);
                 navigate("/", { replace: true });
               }}
             >
@@ -285,12 +338,17 @@ function Form() {
                           value={optionId}
                           onChange={(e) => {
                             if (questionType === "radio") {
-                              singleSelectHandler(qId, e.target.value);
+                              singleSelectHandler(
+                                qId,
+                                e.target.value,
+                                questionType
+                              );
                             } else {
                               multiSelectHandler(
                                 e.target.checked,
                                 qId,
-                                e.target.value
+                                e.target.value,
+                                questionType
                               );
                             }
                           }}
