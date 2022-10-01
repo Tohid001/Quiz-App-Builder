@@ -68,6 +68,7 @@ function Form() {
 
     if (!selectedAnswers.length) {
       //////brand new
+      console.log(" ////// brand new radio");
       setSelectedAnswers([{ quesTionId, answer: [optionId] }]);
     } else {
       const temp = selectedAnswers?.findIndex(
@@ -75,12 +76,14 @@ function Form() {
       );
       if (temp === -1) {
         //////adding
+        console.log(" //////adding radio");
         setSelectedAnswers([
           ...selectedAnswers,
           { quesTionId, answer: [optionId] },
         ]);
       } else {
         //////updating
+        console.log("//////updating radio");
         setSelectedAnswers((prev) => {
           return prev?.map((answer) => {
             if (answer.quesTionId === quesTionId) {
@@ -98,7 +101,7 @@ function Form() {
 
     if (!selectedAnswers.length) {
       ////// brand new
-      console.log(" ////// brand new");
+      console.log(" ////// brand new check");
       setSelectedAnswers([{ quesTionId, answer: [optionId] }]);
     } else {
       const temp = selectedAnswers?.findIndex(
@@ -106,33 +109,33 @@ function Form() {
       );
       if (temp === -1) {
         //////adding
-        console.log(" //////adding");
+        console.log(" //////adding check");
         setSelectedAnswers([
           ...selectedAnswers,
           { quesTionId, answer: [optionId] },
         ]);
       } else {
         //////updating
-        console.log("//////updating");
+        console.log("//////updating check");
         setSelectedAnswers((prev) => {
-          return prev?.map(({ quesTionId: qId, answer }) => {
-            if (qId === quesTionId) {
+          return prev?.map((object) => {
+            if (object.quesTionId === quesTionId) {
               if (isChecked) {
                 //adding another check
                 console.log(" //adding another check");
-                return { ...answer, answer: [...answer, optionId] };
+                return { ...object, answer: [...object.answer, optionId] };
               } else {
                 //deselecting
-                console.log("  //deselecting");
+                console.log("  //deselecting check");
                 return {
-                  ...answer,
-                  answer: answer.filter((prevOptionId) => {
+                  ...object,
+                  answer: object.answer.filter((prevOptionId) => {
                     return prevOptionId !== optionId;
                   }),
                 };
               }
             }
-            return answer;
+            return object;
           });
         });
       }
@@ -176,84 +179,49 @@ function Form() {
                 )}
               </StyledViewQuestionHeader>
               <StyledViewOptionsContainer>
-                {questionType === "radio" ? (
-                  <Radio.Group
-                    onChange={(e) => {
-                      // console.log({ Group: "radio", e, qId });
-                      singleSelectHandler(qId, e.target.value);
-                    }}
-                  >
-                    <Space direction="vertical">
-                      {options?.map(
-                        (
-                          { optionText, optionImageUrl, isCorrect, id },
-                          index
-                        ) => {
-                          return (
-                            <Radio
-                              key={id}
-                              value={id}
-                              onChange={(e) => {
-                                // console.log({ item: "radio", e });
-                              }}
-                            >
-                              <div>
-                                <p>{optionText}</p>
-                                {optionImageUrl && (
-                                  <Image
-                                    width={200}
-                                    src={optionImageUrl}
-                                    preview={false}
-                                  />
-                                )}
-                              </div>
-                            </Radio>
-                          );
-                        }
-                      )}
-                    </Space>
-                  </Radio.Group>
-                ) : (
-                  <Checkbox.Group
-                    onChange={(e) => {
-                      // console.log({ Group: "checkbox", e, qId });
-                    }}
-                  >
-                    <Space direction="vertical">
-                      {options?.map(
-                        (
-                          { optionText, optionImageUrl, isCorrect, id },
-                          index
-                        ) => {
-                          return (
-                            <Checkbox
-                              key={id}
-                              value={id}
-                              onChange={(e) => {
-                                console.log({ item: "checkbox", e });
-                                multiSelectHandler(
-                                  e.target.checked,
-                                  qId,
-                                  e.target.value
-                                );
-                              }}
-                            >
-                              <div>
-                                <p>{optionText}</p>
-                                {optionImageUrl && (
-                                  <Image
-                                    width={200}
-                                    src={optionImageUrl}
-                                    preview={false}
-                                  />
-                                )}
-                              </div>
-                            </Checkbox>
-                          );
-                        }
-                      )}
-                    </Space>
-                  </Checkbox.Group>
+                {options?.map(
+                  (
+                    { optionText, optionImageUrl, isCorrect, id: optionId },
+                    index
+                  ) => {
+                    return (
+                      <div key={optionId} style={{ padding: "1em" }}>
+                        <input
+                          type={questionType}
+                          name={qId}
+                          value={optionText}
+                          onChange={(e) => {
+                            // console.log(e.target.value);
+                            if (questionType === "radio") {
+                              singleSelectHandler(qId, e.target.value);
+                            } else {
+                              multiSelectHandler(
+                                e.target.checked,
+                                qId,
+                                e.target.value
+                              );
+                            }
+                          }}
+                          style={{
+                            display: "tableCell",
+                            verticalAlign: "middle",
+                            cursor: "pointer",
+                          }}
+                        />
+                        <span style={{ marginLeft: ".8em" }}>{optionText}</span>
+                        <div>
+                          {optionImageUrl && (
+                            <Image
+                              width={200}
+                              src={optionImageUrl}
+                              preview={false}
+                              style={{ marginTop: ".8em", marginLeft: ".8em" }}
+                            />
+                          )}
+                        </div>
+                      </div>
+                    );
+                  }
                 )}
               </StyledViewOptionsContainer>
             </StyledViewQuesTionItem>
