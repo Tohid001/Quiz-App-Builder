@@ -117,8 +117,9 @@ function Form() {
       } else {
         //////updating
         console.log("//////updating check");
-        setSelectedAnswers((prev) => {
-          return prev?.map((object) => {
+
+        const tempFilteredAnswersArray = selectedAnswers
+          ?.map((object) => {
             if (object.quesTionId === quesTionId) {
               if (isChecked) {
                 //adding another check
@@ -136,7 +137,12 @@ function Form() {
               }
             }
             return object;
+          })
+          .filter((object) => {
+            return object.answer.length;
           });
+        setSelectedAnswers((prev) => {
+          return tempFilteredAnswersArray;
         });
       }
     }
