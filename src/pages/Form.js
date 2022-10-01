@@ -40,12 +40,12 @@ function Form() {
 
   console.log({ selectedAnswers, quizeState });
 
-  // useEffect(() => {
-  //   localStorage.setItem(
-  //     `selectedAanswers-${quizId}`,
-  //     JSON.stringify(selectedAnswers)
-  //   );
-  // }, [selectedAnswers]);
+  useEffect(() => {
+    localStorage.setItem(
+      `selectedAanswers-${quizId}`,
+      JSON.stringify(selectedAnswers)
+    );
+  }, [selectedAnswers]);
 
   useEffect(() => {
     const localQuizList = getCachedState("quizes");
@@ -148,6 +148,25 @@ function Form() {
     }
   };
 
+  const isCheckedHandler = (questionType, quesTionId, optionId) => {
+    if (!selectedAnswers.length) {
+      return false;
+    } else {
+      const temp = selectedAnswers?.findIndex(
+        (answer) => answer.quesTionId === quesTionId
+      );
+      if (temp === -1) {
+        return false;
+      } else {
+        if (questionType === "radio") {
+          return selectedAnswers[temp].answer[0] === optionId;
+        } else {
+          return selectedAnswers[temp].answer.includes(optionId);
+        }
+      }
+    }
+  };
+
   const submitHandler = (e) => {
     e.preventDefault();
 
@@ -193,11 +212,15 @@ function Form() {
                     return (
                       <div key={optionId} style={{ padding: "1em" }}>
                         <input
+                          checked={isCheckedHandler(
+                            questionType,
+                            qId,
+                            optionId
+                          )}
                           type={questionType}
                           name={qId}
-                          value={optionText}
+                          value={optionId}
                           onChange={(e) => {
-                            // console.log(e.target.value);
                             if (questionType === "radio") {
                               singleSelectHandler(qId, e.target.value);
                             } else {
