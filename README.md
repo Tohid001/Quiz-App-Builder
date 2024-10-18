@@ -1,4 +1,11 @@
-# Getting Started with Create React App
+## What is this about?
+
+A web app inspired by Google Forms for creating and managing custom quizzes. Features include- Quiz customization with multimedia answers, editable content, drag-and-drop question sorting, flexible answer configuration, supporting single or multiple answer types with point assignments, and the option to retake quizzes multiple times, complex state management across nested components, with a bottom-to-top approach to maintain local storage synchronization.
+
+[Live link](https://cute-lily-530e5a.netlify.app)
+
+
+# Getting Started
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
